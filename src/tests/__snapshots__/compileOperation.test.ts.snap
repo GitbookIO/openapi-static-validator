@@ -1,0 +1,64 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`With body without 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    if (value.body !== undefined) {
+        return new ValidationError(path, 'body is not allowed');
+    }
+    return value;
+}"
+`;
+
+exports[`With body required 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj2(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj1(path, value) {
+    const keys = new Set(Object.keys(value));
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj2([
+            ...path,
+            'foo'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
+}
+function obj0(path, value) {
+    if (value.body === undefined) {
+        return new ValidationError(path, 'body is required');
+    }
+    const body = obj1([
+        ...path,
+        'body'
+    ], value.body);
+    if (body instanceof ValidationError) {
+        return body;
+    } else {
+        value.body = body;
+    }
+    return value;
+}"
+`;

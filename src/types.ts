@@ -7,6 +7,28 @@ export interface OpenAPISpec {
             [key: string]: OpenAPIValueSchema;
         };
     };
+    paths?: {
+        [key: string]: OpenAPIPath;
+    };
+}
+
+export interface OpenAPIPath {
+    [httpMethod: string]: OpenAPIOperation;
+}
+
+export interface OpenAPIOperation {
+    operationId?: string;
+    parameters?: OpenAPIParameter[];
+    requestBody?: OpenAPIRequestBody;
+}
+
+export interface OpenAPIRequestBody {
+    required?: boolean;
+    content?: {
+        [contentType: string]: {
+            schema?: OpenAPIValueSchema;
+        };
+    };
 }
 
 export interface OpenAPIParameter {

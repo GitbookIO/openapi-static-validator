@@ -3,6 +3,7 @@ import { namedTypes, builders } from 'ast-types';
 import { ValidationErrorClass, ValidationErrorIdentifier } from './error';
 import { OpenAPIRef, OpenAPISpec } from './types';
 import { compileValueSchema } from './compileValueSchema';
+import { hash } from './hash';
 
 /**
  * Compiler for OpenAPI specs.
@@ -10,7 +11,13 @@ import { compileValueSchema } from './compileValueSchema';
 export class Compiler {
     private input: OpenAPISpec;
 
+    /** Map of hash to an object in the `identifiers` map */
+    private hashes: Map<string, object> = new Map();
+
+    /** Map of objects from the spect to identifier name */
     private identifiers: WeakMap<object, string> = new WeakMap();
+
+    /** Counter to get a new identifier */
     private identifierCounter: number = 0;
 
     private functions: Map<string, namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration> =
@@ -108,6 +115,12 @@ export class Compiler {
             return this.identifiers.get(input)!;
         }
 
+        const hashValue = hash(input);
+        if (this.hashes.has(hashValue)) {
+            return this.identifiers.get(this.hashes.get(hashValue)!)!;
+        }
+
+        this.hashes.set(hashValue, input);
         const name = `obj${this.identifierCounter++}`;
         this.identifiers.set(input, name);
         return name;
