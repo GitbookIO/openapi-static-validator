@@ -72,48 +72,62 @@ function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
 function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
     return compiler.defineValidationFunction(schema, ({ path, value, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
+        const endNodes: namedTypes.BlockStatement['body'] = [];
 
         // Define a variable to be all the keys in `value`
         const keysIdentifier = builders.identifier('keys');
 
+        // Create a Set of all keys
         nodes.push(
             builders.variableDeclaration('const', [
                 builders.variableDeclarator(
                     keysIdentifier,
-                    builders.callExpression(
-                        builders.memberExpression(
-                            builders.identifier('Object'),
-                            builders.identifier('keys'),
+                    builders.newExpression(builders.identifier('Set'), [
+                        builders.callExpression(
+                            builders.memberExpression(
+                                builders.identifier('Object'),
+                                builders.identifier('keys'),
+                            ),
+                            [value],
                         ),
-                        [value],
-                    ),
+                    ]),
                 ),
             ]),
         );
 
-        // if (schema.required?.length) {
-        //     schema.required.forEach((requiredKey) => {
-        //         nodes.push(
-        //             builders.ifStatement(
-        //                 builders.unaryExpression(
-        //                     '!',
-        //                     builders.callExpression(
-        //                         builders.memberExpression(
-        //                             keysIdentifier,
-        //                             builders.identifier('includes'),
-        //                         ),
-        //                         [builders.literal(requiredKey)],
-        //                     ),
-        //                 ),
-        //                 builders.blockStatement([
-        //                     builders.returnStatement(
-        //                         error(`Expected "${requiredKey}" to be defined`),
-        //                     ),
-        //                 ]),
-        //             ),
-        //         );
-        //     });
-        // }
+        if (schema.minProperties) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '<',
+                        builders.memberExpression(keysIdentifier, builders.identifier('size')),
+                        builders.literal(schema.minProperties),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected at least ${schema.minProperties} properties`),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
+        if (schema.maxProperties) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '>',
+                        builders.memberExpression(keysIdentifier, builders.identifier('size')),
+                        builders.literal(schema.maxProperties),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected at most ${schema.maxProperties} properties`),
+                        ),
+                    ]),
+                ),
+            );
+        }
 
         Object.entries(schema.properties ?? {}).forEach(([key, subSchema], index) => {
             const subValueIdentifier = builders.identifier(`value${index}`);
@@ -145,6 +159,8 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                         ]),
                     ),
                 ]),
+
+                // If the result is not an error, then return it
                 builders.ifStatement(
                     builders.binaryExpression(
                         'instanceof',
@@ -153,6 +169,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                     ),
                     builders.blockStatement([builders.returnStatement(resultIdentifier)]),
                 ),
+                // Otherwise, assign it to the value
                 builders.expressionStatement(
                     builders.assignmentExpression(
                         '=',
@@ -161,6 +178,21 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                     ),
                 ),
             ];
+
+            if (schema.additionalProperties) {
+                // Remove the key from the keys set
+                check.push(
+                    builders.expressionStatement(
+                        builders.callExpression(
+                            builders.memberExpression(
+                                keysIdentifier,
+                                builders.identifier('delete'),
+                            ),
+                            [propNameLiteral],
+                        ),
+                    ),
+                );
+            }
 
             nodes.push(
                 builders.ifStatement(
@@ -189,9 +221,78 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
             );
         });
 
+        // No additional properties are allowed
+        if (!schema.additionalProperties && schema.properties) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '>',
+                        builders.memberExpression(keysIdentifier, builders.identifier('size')),
+                        builders.literal(0),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(error(`Unexpected properties`)),
+                    ]),
+                ),
+            );
+        } else if (schema.additionalProperties && schema.additionalProperties !== true) {
+            nodes.push(
+                builders.forOfStatement(
+                    builders.variableDeclaration('const', [
+                        builders.variableDeclarator(builders.identifier('key')),
+                    ]),
+                    keysIdentifier,
+                    builders.blockStatement([
+                        builders.variableDeclaration('const', [
+                            builders.variableDeclarator(
+                                builders.identifier('result'),
+                                builders.callExpression(
+                                    compileValueSchema(compiler, schema.additionalProperties),
+                                    [
+                                        builders.arrayExpression([
+                                            builders.spreadElement(path),
+                                            builders.identifier('key'),
+                                        ]),
+                                        builders.memberExpression.from({
+                                            object: value,
+                                            property: builders.identifier('key'),
+                                            computed: true,
+                                        }),
+                                    ],
+                                ),
+                            ),
+                        ]),
+
+                        builders.ifStatement(
+                            builders.binaryExpression(
+                                'instanceof',
+                                builders.identifier('result'),
+                                ValidationErrorIdentifier,
+                            ),
+                            builders.blockStatement([
+                                builders.returnStatement(builders.identifier('result')),
+                            ]),
+                        ),
+
+                        builders.expressionStatement(
+                            builders.assignmentExpression(
+                                '=',
+                                builders.memberExpression.from({
+                                    object: value,
+                                    property: builders.identifier('key'),
+                                    computed: true,
+                                }),
+                                builders.identifier('result'),
+                            ),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
         nodes.push(builders.returnStatement(value));
 
-        return nodes;
+        return [...nodes, ...endNodes];
     });
 }
 

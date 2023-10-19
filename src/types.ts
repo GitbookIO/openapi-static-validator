@@ -45,9 +45,12 @@ export interface OpenAPINumberSchema {
 export interface OpenAPIObjectSchema {
     type: 'object';
     required?: string[];
-    properties: {
+    properties?: {
         [key: string]: OpenAPIValueSchema & { default?: string | number | boolean };
     };
+    additionalProperties?: boolean | OpenAPIValueSchema;
+    minProperties?: number;
+    maxProperties?: number;
 }
 
 export interface OpenAPIRef {

@@ -25,7 +25,6 @@ describe('Objects', () => {
             },
             required: ['foo'],
         });
-        console.log(compiler.compile());
         expect(compiler.compile()).toMatchSnapshot();
     });
 
@@ -40,7 +39,57 @@ describe('Objects', () => {
                 },
             },
         });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('as free form object', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'object',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('with additionalProperties: true', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'object',
+            properties: {
+                foo: {
+                    type: 'number',
+                    default: 10,
+                },
+            },
+            additionalProperties: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('with additionalProperties: {}', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'object',
+            properties: {
+                foo: {
+                    type: 'number',
+                    default: 10,
+                },
+            },
+            additionalProperties: {
+                type: 'string',
+            },
+        });
         console.log(compiler.compile());
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('with minProperties/maxProperties', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'object',
+            minProperties: 1,
+            maxProperties: 10,
+        });
         expect(compiler.compile()).toMatchSnapshot();
     });
 });

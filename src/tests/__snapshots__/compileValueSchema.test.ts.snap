@@ -20,7 +20,7 @@ function obj2(path, value) {
     return value;
 }
 function obj0(path, value) {
-    const keys = Object.keys(value);
+    const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
         const result0 = obj1([
@@ -45,6 +45,9 @@ function obj0(path, value) {
         }
         value['bar'] = result1;
     }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
     return value;
 }"
 `;
@@ -63,7 +66,7 @@ function obj1(path, value) {
     return value;
 }
 function obj0(path, value) {
-    const keys = Object.keys(value);
+    const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
         const result0 = obj1([
@@ -76,6 +79,123 @@ function obj0(path, value) {
         value['foo'] = result0;
     } else {
         value['foo'] = 10;
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
+}"
+`;
+
+exports[`Objects as free form object 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    const keys = new Set(Object.keys(value));
+    return value;
+}"
+`;
+
+exports[`Objects with additionalProperties: true 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj0(path, value) {
+    const keys = new Set(Object.keys(value));
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj1([
+            ...path,
+            'foo'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+        keys.delete('foo');
+    } else {
+        value['foo'] = 10;
+    }
+    return value;
+}"
+`;
+
+exports[`Objects with additionalProperties: {} 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj2(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj0(path, value) {
+    const keys = new Set(Object.keys(value));
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj1([
+            ...path,
+            'foo'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+        keys.delete('foo');
+    } else {
+        value['foo'] = 10;
+    }
+    for (const key of keys) {
+        const result = obj2([
+            ...path,
+            key
+        ], value[key]);
+        if (result instanceof ValidationError) {
+            return result;
+        }
+        value[key] = result;
+    }
+    return value;
+}"
+`;
+
+exports[`Objects with minProperties/maxProperties 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    const keys = new Set(Object.keys(value));
+    if (keys.size < 1) {
+        return new ValidationError(path, 'Expected at least 1 properties');
+    }
+    if (keys.size > 10) {
+        return new ValidationError(path, 'Expected at most 10 properties');
     }
     return value;
 }"
