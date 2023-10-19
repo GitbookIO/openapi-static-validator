@@ -19,7 +19,9 @@ export type OpenAPIValueSchema =
     | OpenAPIOneOfSchema
     | OpenAPIStringSchema
     | OpenAPINumberSchema
-    | OpenAPIObjectSchema;
+    | OpenAPIBooleanSchema
+    | OpenAPIObjectSchema
+    | OpenAPIArraySchema;
 
 export interface OpenAPIAllOfSchema {
     allOf: OpenAPIValueSchema[];
@@ -33,16 +35,20 @@ export interface OpenAPIOneOfSchema {
     oneOf: OpenAPIValueSchema[];
 }
 
-export interface OpenAPIStringSchema {
+export interface OpenAPIStringSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
     type: 'string';
     format?: 'date' | 'uri';
 }
 
-export interface OpenAPINumberSchema {
+export interface OpenAPINumberSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
     type: 'number';
 }
 
-export interface OpenAPIObjectSchema {
+export interface OpenAPIBooleanSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
+    type: 'boolean';
+}
+
+export interface OpenAPIObjectSchema extends OpenAPINullableSchema {
     type: 'object';
     required?: string[];
     properties?: {
@@ -51,6 +57,21 @@ export interface OpenAPIObjectSchema {
     additionalProperties?: boolean | OpenAPIValueSchema;
     minProperties?: number;
     maxProperties?: number;
+}
+
+export interface OpenAPIArraySchema extends OpenAPINullableSchema {
+    type: 'array';
+    items: OpenAPIValueSchema;
+    minItems?: number;
+    maxItems?: number;
+}
+
+export interface OpenAPINullableSchema {
+    nullable?: boolean;
+}
+
+export interface OpenAPIEnumableSchema {
+    enum?: (string | number | boolean)[];
 }
 
 export interface OpenAPIRef {

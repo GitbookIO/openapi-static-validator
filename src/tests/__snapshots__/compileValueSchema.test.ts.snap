@@ -1,5 +1,38 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Nullable nullable: true 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    if (value === null) {
+        return value;
+    }
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}"
+`;
+
+exports[`String with enum 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    if (value !== 'a' && value !== 'b' && value !== 'c') {
+        return new ValidationError(path, 'Expected one of the enum value');
+    }
+    return value;
+}"
+`;
+
 exports[`Objects with a required prop 1`] = `
 "class ValidationError extends Error {
     constructor(path, message) {

@@ -3,12 +3,19 @@ import { namedTypes, builders } from 'ast-types';
 import { Compiler, ValidationErrorIdentifier } from './compiler';
 import {
     OpenAPIAnyOfSchema,
+    OpenAPIArraySchema,
+    OpenAPIBooleanSchema,
+    OpenAPIEnumableSchema,
+    OpenAPINullableSchema,
     OpenAPINumberSchema,
     OpenAPIObjectSchema,
     OpenAPIStringSchema,
     OpenAPIValueSchema,
 } from './types';
 
+/**
+ * Compile a JSON schema into a validation function.
+ */
 export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchema) {
     if ('anyOf' in schema) {
         return compileAnyOfSchema(compiler, schema);
@@ -22,6 +29,10 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
                 return compileNumberSchema(compiler, schema);
             case 'string':
                 return compileStringSchema(compiler, schema);
+            case 'boolean':
+                return compileBooleanSchema(compiler, schema);
+            case 'array':
+                return compileArraySchema(compiler, schema);
         }
     }
 
@@ -73,6 +84,8 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
     return compiler.defineValidationFunction(schema, ({ path, value, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
         const endNodes: namedTypes.BlockStatement['body'] = [];
+
+        nodes.push(...compileNullableCheck(compiler, schema, value));
 
         // Define a variable to be all the keys in `value`
         const keysIdentifier = builders.identifier('keys');
@@ -296,10 +309,28 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
     });
 }
 
-function compileNumberSchema(compiler: Compiler, schema: OpenAPINumberSchema) {
+function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
     return compiler.defineValidationFunction(schema, ({ value, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
+        nodes.push(...compileNullableCheck(compiler, schema, value));
+        
+
+        nodes.push(builders.returnStatement(value));
+
+        return nodes;
+    });
+}
+
+function compileNumberSchema(compiler: Compiler, schema: OpenAPINumberSchema) {
+    return compiler.defineValidationFunction(schema, ({ value, error }) => {
+        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
+        if (enumCheck) {
+            return enumCheck;
+        }
+
+        const nodes: namedTypes.BlockStatement['body'] = [];
+        nodes.push(...compileNullableCheck(compiler, schema, value));
         nodes.push(
             builders.ifStatement(
                 builders.unaryExpression(
@@ -322,8 +353,14 @@ function compileNumberSchema(compiler: Compiler, schema: OpenAPINumberSchema) {
 
 function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
     return compiler.defineValidationFunction(schema, ({ value, error }) => {
-        const nodes: namedTypes.BlockStatement['body'] = [];
+        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
+        if (enumCheck) {
+            return enumCheck;
+        }
 
+
+        const nodes: namedTypes.BlockStatement['body'] = [];
+        nodes.push(...compileNullableCheck(compiler, schema, value));
         nodes.push(
             builders.ifStatement(
                 builders.unaryExpression(
@@ -342,4 +379,75 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
 
         return nodes;
     });
+}
+
+function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) {
+    return compiler.defineValidationFunction(schema, ({ value, error }) => {
+        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
+        if (enumCheck) {
+            return enumCheck;
+        }
+
+        const nodes: namedTypes.BlockStatement['body'] = [];
+        nodes.push(...compileNullableCheck(compiler, schema, value));
+        nodes.push(
+            builders.ifStatement(
+                builders.unaryExpression(
+                    '!',
+                    builders.binaryExpression(
+                        '===',
+                        builders.unaryExpression('typeof', value),
+                        builders.literal('boolean'),
+                    ),
+                ),
+                builders.blockStatement([builders.returnStatement(error('Expected a boolean'))]),
+            ),
+        );
+
+        nodes.push(builders.returnStatement(value));
+
+        return nodes;
+    });
+}
+
+function compileNullableCheck(compiler: Compiler, schema: OpenAPINullableSchema, value: namedTypes.Identifier) {
+    if (!schema.nullable) {
+        return [];
+    }
+
+    return [
+        builders.ifStatement(
+            builders.binaryExpression('===', value, builders.identifier('null')),
+            builders.blockStatement([builders.returnStatement(value)]),
+        )
+    ]
+}
+
+
+function compileEnumableCheck(compiler: Compiler, schema: OpenAPIEnumableSchema, value: namedTypes.Identifier, error: (message: string) => namedTypes.NewExpression) {
+    if (!schema.enum) {
+        return null;
+    }
+
+    return [
+        builders.ifStatement(
+            schema.enum.reduce((acc, val) => {
+                const test = builders.binaryExpression('!==', value, builders.literal(val))
+
+                if (!acc) {
+                    return test;
+                }
+
+                return builders.logicalExpression(
+                    '&&',
+                    acc,
+                    test
+                )
+            }, null as (namedTypes.BinaryExpression | namedTypes.LogicalExpression | null))!,
+            builders.blockStatement([builders.returnStatement(
+                error('Expected one of the enum value')
+            )]),
+        ),
+        builders.returnStatement(value)
+    ]
 }

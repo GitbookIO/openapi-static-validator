@@ -10,6 +10,29 @@ test('number', () => {
     expect(compiler.compile()).toMatchSnapshot();
 });
 
+describe('Nullable', () => {
+    test('nullable: true', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            nullable: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+});
+
+describe('String', () => {
+    test('with enum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'string',
+            enum: ['a', 'b', 'c']
+        });
+        console.log(compiler.compile());
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+});
+
 describe('Objects', () => {
     test('with a required prop', () => {
         const compiler = new Compiler();
@@ -79,7 +102,6 @@ describe('Objects', () => {
                 type: 'string',
             },
         });
-        console.log(compiler.compile());
         expect(compiler.compile()).toMatchSnapshot();
     });
 
