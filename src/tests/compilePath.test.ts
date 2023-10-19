@@ -1,16 +1,21 @@
 import { Compiler } from '../compiler';
-import { compileOperation } from '../compileOperation';
+import { compilePath } from '../compilePath';
 
-describe('With body', () => {
-    test('without', () => {
-        const compiler = new Compiler();
-        compileOperation(compiler, {});
-        expect(compiler.compile()).toMatchSnapshot();
-    });
-
-    test('required', () => {
-        const compiler = new Compiler();
-        compileOperation(compiler, {
+test('with get and post', () => {
+    const compiler = new Compiler();
+    compilePath(compiler, {
+        get: {
+            parameters: [
+                {
+                    name: 'foo',
+                    in: 'query',
+                    schema: {
+                        type: 'number',
+                    },
+                },
+            ]
+        },
+        post: {
             requestBody: {
                 required: true,
                 content: {
@@ -26,7 +31,8 @@ describe('With body', () => {
                     },
                 },
             }
-        });
-        expect(compiler.compile()).toMatchSnapshot();
+        }
     });
+    console.log(compiler.compile());
+    expect(compiler.compile()).toMatchSnapshot();
 });

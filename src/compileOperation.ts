@@ -5,7 +5,6 @@ import { OpenAPIOperation } from "./types";
 import { compileValueSchema } from './compileValueSchema';
 import { ValidationErrorIdentifier } from './error';
 
-
 /**
  * Compile an operation into a function.
  * The value input is an object:
@@ -89,7 +88,6 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
                     ])
                 ));
             }
-
         } else {
             nodes.push(builders.ifStatement(
                 builders.binaryExpression(

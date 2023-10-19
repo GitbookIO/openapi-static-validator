@@ -1,0 +1,64 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`with get and post 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (value.body !== undefined) {
+        return new ValidationError(path, 'body is not allowed');
+    }
+    return value;
+}
+function obj4(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj3(path, value) {
+    const keys = new Set(Object.keys(value));
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj4([
+            ...path,
+            'foo'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
+}
+function obj2(path, value) {
+    if (value.body === undefined) {
+        return new ValidationError(path, 'body is required');
+    }
+    const body = obj3([
+        ...path,
+        'body'
+    ], value.body);
+    if (body instanceof ValidationError) {
+        return body;
+    } else {
+        value.body = body;
+    }
+    return value;
+}
+function obj0(path, value) {
+    if (value.method === 'get') {
+        return obj1(path, value);
+    }
+    if (value.method === 'post') {
+        return obj2(path, value);
+    }
+    return new ValidationError(path, 'method not supported');
+}"
+`;

@@ -23,6 +23,12 @@ const PRESERVE_PROPS = [
     'additionalProperties',
     'minProperties',
     'maxProperties',
+    'requestBody',
+    'get',
+    'post',
+    'put',
+    'delete',
+    'patch',
 ]
 
 /**
