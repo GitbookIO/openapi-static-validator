@@ -1,0 +1,23 @@
+{
+    "name": "openapi-to-validate",
+    "version": "0.0.0",
+    "description": "Compile an OpenAPI file to a JS validation function for requests",
+    "main": "index.js",
+    "scripts": {
+        "test": "bun test",
+        "format": "prettier ./ --ignore-unknown --write"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ast-types": "^0.14.2",
+        "escodegen": "^2.1.0",
+        "esprima": "^4.0.1"
+    },
+    "devDependencies": {
+        "@types/escodegen": "^0.0.9",
+        "@types/esprima": "^4.0.5",
+        "@types/estree": "^1.0.3",
+        "prettier": "^3.0.3"
+    }
+}

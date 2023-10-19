@@ -1,0 +1,129 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Objects with a required prop 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj2(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj0(path, value) {
+    const keys = Object.keys(value);
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj1([
+            ...path,
+            'foo'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+    } else {
+        return new ValidationError(path, 'Expected "foo" to be defined');
+    }
+    const value1 = value['bar'];
+    if (value1 !== undefined) {
+        const result1 = obj2([
+            ...path,
+            'bar'
+        ], value1);
+        if (result1 instanceof ValidationError) {
+            return result1;
+        }
+        value['bar'] = result1;
+    }
+    return value;
+}"
+`;
+
+exports[`Objects with a default value 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj0(path, value) {
+    const keys = Object.keys(value);
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj1([
+            ...path,
+            'foo'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+    } else {
+        value['foo'] = 10;
+    }
+    return value;
+}"
+`;
+
+exports[`number 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}"
+`;
+
+exports[`anyOf 1`] = `
+"class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj2(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj0(path, value) {
+    const value0 = obj1(path, value);
+    if (!(value0 instanceof ValidationError)) {
+        return value0;
+    }
+    const value1 = obj2(path, value);
+    if (!(value1 instanceof ValidationError)) {
+        return value1;
+    }
+    return new ValidationError(path, 'Expected one of the anyOf schemas to match');
+}"
+`;
