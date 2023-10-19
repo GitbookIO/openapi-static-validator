@@ -1,5 +1,35 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Number basic 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}"
+`;
+
+exports[`Integer basic 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj0(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}"
+`;
+
 exports[`Nullable nullable: true 1`] = `
 "class ValidationError {
     constructor(path, message) {
@@ -234,21 +264,6 @@ function obj0(path, value) {
 }"
 `;
 
-exports[`number 1`] = `
-"class ValidationError {
-    constructor(path, message) {
-        super(message);
-        this.path = path;
-    }
-}
-function obj0(path, value) {
-    if (!(typeof value === 'number')) {
-        return new ValidationError(path, 'Expected a number');
-    }
-    return value;
-}"
-`;
-
 exports[`anyOf 1`] = `
 "class ValidationError {
     constructor(path, message) {
@@ -278,5 +293,110 @@ function obj0(path, value) {
         return value1;
     }
     return new ValidationError(path, 'Expected one of the anyOf schemas to match');
+}"
+`;
+
+exports[`oneOf 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj2(path, value) {
+    if (!(typeof value === 'string')) {
+        return new ValidationError(path, 'Expected a string');
+    }
+    return value;
+}
+function obj0(path, value) {
+    let result;
+    const alt0 = obj1(path, value);
+    if (!(alt0 instanceof ValidationError)) {
+        result = alt0;
+    }
+    const alt1 = obj2(path, value);
+    if (!(alt1 instanceof ValidationError)) {
+        result = alt1;
+        if (result !== undefined) {
+            return new ValidationError(path, 'Expected to only match one of the schemas');
+        }
+    }
+    return result;
+}"
+`;
+
+exports[`allOf 1`] = `
+"class ValidationError {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj2(path, value) {
+    if (!(typeof value === 'number')) {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj1(path, value) {
+    const keys = new Set(Object.keys(value));
+    const value0 = value['a'];
+    if (value0 !== undefined) {
+        const result0 = obj2([
+            ...path,
+            'a'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['a'] = result0;
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
+}
+function obj4(path, value) {
+    if (!(typeof value === 'string')) {
+        return new ValidationError(path, 'Expected a string');
+    }
+    return value;
+}
+function obj3(path, value) {
+    const keys = new Set(Object.keys(value));
+    const value0 = value['b'];
+    if (value0 !== undefined) {
+        const result0 = obj4([
+            ...path,
+            'b'
+        ], value0);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['b'] = result0;
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
+}
+function obj0(path, value) {
+    let result = value;
+    result = obj1(path, result);
+    if (result instanceof ValidationError) {
+        return result;
+    }
+    result = obj3(path, result);
+    if (result instanceof ValidationError) {
+        return result;
+    }
+    return result;
 }"
 `;

@@ -1,12 +1,25 @@
 import { Compiler } from '../compiler';
 import { compileValueSchema } from '../compileValueSchema';
 
-test('number', () => {
-    const compiler = new Compiler();
-    compileValueSchema(compiler, {
-        type: 'number',
+describe('Number', () => {
+    test('basic', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
     });
-    expect(compiler.compile()).toMatchSnapshot();
+});
+
+describe('Integer', () => {
+    test('basic', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            format: 'int32',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 describe('Nullable', () => {
@@ -123,6 +136,42 @@ test('anyOf', () => {
             },
             {
                 type: 'string',
+            },
+        ],
+    });
+    expect(compiler.compile()).toMatchSnapshot();
+});
+
+test('oneOf', () => {
+    const compiler = new Compiler();
+    compileValueSchema(compiler, {
+        oneOf: [
+            {
+                type: 'number',
+            },
+            {
+                type: 'string',
+            },
+        ],
+    });
+    expect(compiler.compile()).toMatchSnapshot();
+});
+
+test('allOf', () => {
+    const compiler = new Compiler();
+    compileValueSchema(compiler, {
+        allOf: [
+            {
+                type: 'object',
+                properties: {
+                    a: { type: 'number' },
+                }
+            },
+            {
+                type: 'object',
+                properties: {
+                    b: { type: 'string' },
+                }
             },
         ],
     });

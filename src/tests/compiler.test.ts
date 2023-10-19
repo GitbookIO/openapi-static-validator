@@ -22,6 +22,6 @@ test('components ref', () => {
         },
     });
     compiler.build();
-    console.log(compiler.compile());
     expect(compiler.compile()).toMatchSnapshot();
 });
+

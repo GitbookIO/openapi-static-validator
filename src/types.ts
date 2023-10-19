@@ -22,6 +22,7 @@ export type OpenAPIValueSchema =
     | OpenAPIOneOfSchema
     | OpenAPIStringSchema
     | OpenAPINumberSchema
+    | OpenAPIIntegerSchema
     | OpenAPIBooleanSchema
     | OpenAPIObjectSchema
     | OpenAPIArraySchema
@@ -46,6 +47,11 @@ export interface OpenAPIStringSchema extends OpenAPINullableSchema, OpenAPIEnuma
 
 export interface OpenAPINumberSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
     type: 'number';
+}
+
+export interface OpenAPIIntegerSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
+    type: 'integer';
+    format?: 'int32';
 }
 
 export interface OpenAPIBooleanSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {

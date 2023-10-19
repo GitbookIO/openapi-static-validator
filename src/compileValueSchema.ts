@@ -2,13 +2,16 @@ import { namedTypes, builders } from 'ast-types';
 
 import type { Compiler } from './compiler';
 import {
+    OpenAPIAllOfSchema,
     OpenAPIAnyOfSchema,
     OpenAPIArraySchema,
     OpenAPIBooleanSchema,
     OpenAPIEnumableSchema,
+    OpenAPIIntegerSchema,
     OpenAPINullableSchema,
     OpenAPINumberSchema,
     OpenAPIObjectSchema,
+    OpenAPIOneOfSchema,
     OpenAPIStringSchema,
     OpenAPIValueSchema,
 } from './types';
@@ -26,10 +29,19 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
         return compileAnyOfSchema(compiler, schema);
     }
 
+    if ('oneOf' in schema) {
+        return compileOneOfSchema(compiler, schema);
+    }
+
+    if ('allOf' in schema) {
+        return compileAllOfSchema(compiler, schema);
+    }
+
     if ('type' in schema) {
         switch (schema.type) {
             case 'object':
                 return compileObjectSchema(compiler, schema);
+            case 'integer':
             case 'number':
                 return compileNumberSchema(compiler, schema);
             case 'string':
@@ -38,10 +50,13 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
                 return compileBooleanSchema(compiler, schema);
             case 'array':
                 return compileArraySchema(compiler, schema);
+            default:
+                throw new Error(`Unsupported schema: ${JSON.stringify(schema)}`);
         }
     }
 
-    throw new Error(`Unsupported schema: ${JSON.stringify(schema)}`);
+    return compileAnySchema(compiler, schema);
+
 }
 
 function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
@@ -80,6 +95,113 @@ function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
         });
 
         nodes.push(builders.returnStatement(error('Expected one of the anyOf schemas to match')));
+
+        return nodes;
+    });
+}
+
+function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
+    return compiler.defineValidationFunction(schema, ({ value, path, error }) => {
+        const nodes: namedTypes.BlockStatement['body'] = [];
+
+        // Declare the variable to use as a result, then iterate over each schema
+        const resultIdentifier = builders.identifier('result');
+        nodes.push(
+            builders.variableDeclaration('let', [builders.variableDeclarator(resultIdentifier)]),
+        );
+
+        schema.oneOf.forEach((subSchema, index) => {
+            const fnIdentifier = compileValueSchema(compiler, subSchema);
+            const altIdentifier = builders.identifier(`alt${index}`);
+
+            // Allocate a variable for the result of the schema alternative
+            nodes.push(
+                builders.variableDeclaration('const', [
+                    builders.variableDeclarator(
+                        altIdentifier,
+                        builders.callExpression(fnIdentifier, [path, value]),
+                    ),
+                ]),
+            );
+
+            nodes.push(
+                builders.ifStatement(
+                    builders.unaryExpression(
+                        '!',
+                        builders.binaryExpression(
+                            'instanceof',
+                            altIdentifier,
+                            ValidationErrorIdentifier,
+                        ),
+                    ),
+                    builders.blockStatement([
+                        builders.expressionStatement(
+                            builders.assignmentExpression('=', resultIdentifier, altIdentifier),
+                        ),
+                        ...(index > 0
+                            ? [
+                                  builders.ifStatement(
+                                      builders.binaryExpression(
+                                          '!==',
+                                          resultIdentifier,
+                                          builders.identifier('undefined'),
+                                      ),
+                                      builders.blockStatement([
+                                          builders.returnStatement(
+                                              error('Expected to only match one of the schemas'),
+                                          ),
+                                      ]),
+                                  ),
+                              ]
+                            : []),
+                    ]),
+                ),
+            );
+        });
+
+        nodes.push(builders.returnStatement(resultIdentifier));
+
+        return nodes;
+    });
+}
+
+function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
+    return compiler.defineValidationFunction(schema, ({ value, path, error }) => {
+        const nodes: namedTypes.BlockStatement['body'] = [];
+
+        const resultIdentifier = builders.identifier('result');
+        nodes.push(
+            builders.variableDeclaration('let', [builders.variableDeclarator(resultIdentifier, value)]),
+        );
+
+        schema.allOf.forEach((subSchema, index) => {
+            const fnIdentifier = compileValueSchema(compiler, subSchema);
+
+            nodes.push(
+                builders.expressionStatement(
+                    builders.assignmentExpression(
+                        '=',
+                        resultIdentifier,
+                        builders.callExpression(fnIdentifier, [path, resultIdentifier]),
+                    ),
+                ),
+            );
+
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        'instanceof',
+                        resultIdentifier,
+                        ValidationErrorIdentifier,
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(resultIdentifier),
+                    ]),
+                )
+            )
+        });
+
+        nodes.push(builders.returnStatement(resultIdentifier));
 
         return nodes;
     });
@@ -326,7 +448,10 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
     });
 }
 
-function compileNumberSchema(compiler: Compiler, schema: OpenAPINumberSchema) {
+function compileNumberSchema(
+    compiler: Compiler,
+    schema: OpenAPINumberSchema | OpenAPIIntegerSchema,
+) {
     return compiler.defineValidationFunction(schema, ({ value, error }) => {
         const enumCheck = compileEnumableCheck(compiler, schema, value, error);
         if (enumCheck) {
@@ -410,6 +535,15 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
         nodes.push(builders.returnStatement(value));
 
         return nodes;
+    });
+}
+
+
+function compileAnySchema(compiler: Compiler, schema: object) {
+    return compiler.defineValidationFunction(schema, ({ value }) => {
+        return [
+            builders.returnStatement(value)
+        ];
     });
 }
 
