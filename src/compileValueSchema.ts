@@ -1,6 +1,6 @@
 import { namedTypes, builders } from 'ast-types';
 
-import { Compiler, ValidationErrorIdentifier } from './compiler';
+import type { Compiler } from './compiler';
 import {
     OpenAPIAnyOfSchema,
     OpenAPIArraySchema,
@@ -12,11 +12,16 @@ import {
     OpenAPIStringSchema,
     OpenAPIValueSchema,
 } from './types';
+import { ValidationErrorIdentifier } from './error';
 
 /**
  * Compile a JSON schema into a validation function.
  */
 export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchema) {
+    if ('$ref' in schema) {
+        return compileValueSchema(compiler, compiler.resolveRef(schema));
+    }
+
     if ('anyOf' in schema) {
         return compileAnyOfSchema(compiler, schema);
     }
@@ -314,7 +319,6 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         nodes.push(...compileNullableCheck(compiler, schema, value));
-        
 
         nodes.push(builders.returnStatement(value));
 
@@ -358,7 +362,6 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
             return enumCheck;
         }
 
-
         const nodes: namedTypes.BlockStatement['body'] = [];
         nodes.push(...compileNullableCheck(compiler, schema, value));
         nodes.push(
@@ -368,10 +371,10 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                     builders.binaryExpression(
                         '===',
                         builders.unaryExpression('typeof', value),
-                        builders.literal('number'),
+                        builders.literal('string'),
                     ),
                 ),
-                builders.blockStatement([builders.returnStatement(error('Expected a number'))]),
+                builders.blockStatement([builders.returnStatement(error('Expected a string'))]),
             ),
         );
 
@@ -410,7 +413,11 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
     });
 }
 
-function compileNullableCheck(compiler: Compiler, schema: OpenAPINullableSchema, value: namedTypes.Identifier) {
+function compileNullableCheck(
+    compiler: Compiler,
+    schema: OpenAPINullableSchema,
+    value: namedTypes.Identifier,
+) {
     if (!schema.nullable) {
         return [];
     }
@@ -419,35 +426,38 @@ function compileNullableCheck(compiler: Compiler, schema: OpenAPINullableSchema,
         builders.ifStatement(
             builders.binaryExpression('===', value, builders.identifier('null')),
             builders.blockStatement([builders.returnStatement(value)]),
-        )
-    ]
+        ),
+    ];
 }
 
-
-function compileEnumableCheck(compiler: Compiler, schema: OpenAPIEnumableSchema, value: namedTypes.Identifier, error: (message: string) => namedTypes.NewExpression) {
+function compileEnumableCheck(
+    compiler: Compiler,
+    schema: OpenAPIEnumableSchema,
+    value: namedTypes.Identifier,
+    error: (message: string) => namedTypes.NewExpression,
+) {
     if (!schema.enum) {
         return null;
     }
 
     return [
         builders.ifStatement(
-            schema.enum.reduce((acc, val) => {
-                const test = builders.binaryExpression('!==', value, builders.literal(val))
+            schema.enum.reduce(
+                (acc, val) => {
+                    const test = builders.binaryExpression('!==', value, builders.literal(val));
 
-                if (!acc) {
-                    return test;
-                }
+                    if (!acc) {
+                        return test;
+                    }
 
-                return builders.logicalExpression(
-                    '&&',
-                    acc,
-                    test
-                )
-            }, null as (namedTypes.BinaryExpression | namedTypes.LogicalExpression | null))!,
-            builders.blockStatement([builders.returnStatement(
-                error('Expected one of the enum value')
-            )]),
+                    return builders.logicalExpression('&&', acc, test);
+                },
+                null as namedTypes.BinaryExpression | namedTypes.LogicalExpression | null,
+            )!,
+            builders.blockStatement([
+                builders.returnStatement(error('Expected one of the enum value')),
+            ]),
         ),
-        builders.returnStatement(value)
-    ]
+        builders.returnStatement(value),
+    ];
 }

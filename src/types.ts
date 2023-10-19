@@ -1,7 +1,10 @@
 export interface OpenAPISpec {
-    components: {
+    components?: {
         parameters?: {
             [key: string]: OpenAPIParameter;
+        };
+        schemas?: {
+            [key: string]: OpenAPIValueSchema;
         };
     };
 }
@@ -10,7 +13,7 @@ export interface OpenAPIParameter {
     name: string;
     in: string;
     required?: boolean;
-    schema: OpenAPIValueSchema | OpenAPIRef;
+    schema: OpenAPIValueSchema;
 }
 
 export type OpenAPIValueSchema =
@@ -21,7 +24,8 @@ export type OpenAPIValueSchema =
     | OpenAPINumberSchema
     | OpenAPIBooleanSchema
     | OpenAPIObjectSchema
-    | OpenAPIArraySchema;
+    | OpenAPIArraySchema
+    | OpenAPIRef;
 
 export interface OpenAPIAllOfSchema {
     allOf: OpenAPIValueSchema[];

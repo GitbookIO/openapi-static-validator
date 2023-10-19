@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Nullable nullable: true 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -19,7 +19,7 @@ function obj0(path, value) {
 `;
 
 exports[`String with enum 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -34,7 +34,7 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with a required prop 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -47,8 +47,8 @@ function obj1(path, value) {
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'number')) {
-        return new ValidationError(path, 'Expected a number');
+    if (!(typeof value === 'string')) {
+        return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
@@ -86,7 +86,7 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with a default value 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -121,7 +121,7 @@ function obj0(path, value) {
 `;
 
 exports[`Objects as free form object 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -134,7 +134,7 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with additionalProperties: true 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -167,7 +167,7 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with additionalProperties: {} 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -180,8 +180,8 @@ function obj1(path, value) {
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'number')) {
-        return new ValidationError(path, 'Expected a number');
+    if (!(typeof value === 'string')) {
+        return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
@@ -216,7 +216,7 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with minProperties/maxProperties 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -235,7 +235,7 @@ function obj0(path, value) {
 `;
 
 exports[`number 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -250,7 +250,7 @@ function obj0(path, value) {
 `;
 
 exports[`anyOf 1`] = `
-"class ValidationError extends Error {
+"class ValidationError {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -263,8 +263,8 @@ function obj1(path, value) {
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'number')) {
-        return new ValidationError(path, 'Expected a number');
+    if (!(typeof value === 'string')) {
+        return new ValidationError(path, 'Expected a string');
     }
     return value;
 }

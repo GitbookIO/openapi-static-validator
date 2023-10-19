@@ -1,30 +1,23 @@
 import escodegen from 'escodegen';
-import esprima from 'esprima';
 import { namedTypes, builders } from 'ast-types';
+import { ValidationErrorClass, ValidationErrorIdentifier } from './error';
+import { OpenAPIRef, OpenAPISpec } from './types';
+import { compileValueSchema } from './compileValueSchema';
 
-export const ValidationErrorIdentifier: namedTypes.Identifier = {
-    type: 'Identifier',
-    name: 'ValidationError',
-};
-
-const ValidationErrorClass = esprima.parseScript(`
-class ValidationError extends Error {
-  constructor(path, message) {
-    super(message);
-    this.path = path;
-  }
-}
-`).body[0] as namedTypes.ClassDeclaration;
-
+/**
+ * Compiler for OpenAPI specs.
+ */
 export class Compiler {
+    private input: OpenAPISpec;
+
     private identifiers: WeakMap<object, string> = new WeakMap();
     private identifierCounter: number = 0;
 
     private functions: Map<string, namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration> =
-        new Map();
+        new Map([[ValidationErrorIdentifier.name, ValidationErrorClass]]);
 
-    constructor() {
-        this.functions.set(ValidationErrorIdentifier.name, ValidationErrorClass);
+    constructor(input: OpenAPISpec = {}) {
+        this.input = input;
     }
 
     /**
@@ -82,10 +75,27 @@ export class Compiler {
         });
     }
 
+    /**
+     * Build the AST from the entire spec.
+     */
+    public build() {
+        // Index all the schema components.
+        const schemas = this.input.components?.schemas ?? {};
+        Object.values(schemas).forEach((schema) => {
+            compileValueSchema(this, schema);
+        });
+    }
+
+    /**
+     * Return the AST for the program.
+     */
     public ast() {
         return builders.program([...this.functions.values()]);
     }
 
+    /**
+     * Generate the JS code for the AST.
+     */
     public compile() {
         return escodegen.generate(this.ast());
     }
@@ -101,5 +111,23 @@ export class Compiler {
         const name = `obj${this.identifierCounter++}`;
         this.identifiers.set(input, name);
         return name;
+    }
+
+    /**
+     * Resolve a reference to part of the spec.
+     * We only support "#/" type of references.
+     */
+    public resolveRef(ref: OpenAPIRef) {
+        const parts = ref.$ref.split('/').slice(1);
+
+        let value: any = this.input;
+        for (const part of parts) {
+            value = value[part];
+            if (value === undefined) {
+                throw new Error(`Could not resolve reference ${ref.$ref}`);
+            }
+        }
+
+        return value;
     }
 }

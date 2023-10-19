@@ -1,6 +1,5 @@
 import { Compiler } from '../compiler';
 import { compileValueSchema } from '../compileValueSchema';
-import { OpenAPIValueSchema } from '../types';
 
 test('number', () => {
     const compiler = new Compiler();
@@ -26,9 +25,8 @@ describe('String', () => {
         const compiler = new Compiler();
         compileValueSchema(compiler, {
             type: 'string',
-            enum: ['a', 'b', 'c']
+            enum: ['a', 'b', 'c'],
         });
-        console.log(compiler.compile());
         expect(compiler.compile()).toMatchSnapshot();
     });
 });
