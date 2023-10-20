@@ -1,3 +1,4 @@
+import { expect, test } from 'bun:test';
 import { Compiler } from '../compiler';
 
 test('components ref', () => {

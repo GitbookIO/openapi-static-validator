@@ -20,7 +20,7 @@ import { OpenAPIParsedPath } from './paths';
 export function compilePath(
     compiler: Compiler,
     path: OpenAPIParsedPath,
-    pathOperations: OpenAPIPath
+    pathOperations: OpenAPIPath,
 ) {
     return compiler.declareForInput(pathOperations, (functionId) => {
         const requestIdentifier = builders.identifier('request');
@@ -30,7 +30,7 @@ export function compilePath(
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         Object.entries(pathOperations).forEach(([method, operation]) => {
-            const fnOperation = compileOperation(compiler,path,  operation);
+            const fnOperation = compileOperation(compiler, path, operation);
 
             nodes.push(
                 builders.ifStatement(
@@ -41,7 +41,11 @@ export function compilePath(
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            builders.callExpression(fnOperation, [requestIdentifier, pathMatchIdentifier, contextIdentifier]),
+                            builders.callExpression(fnOperation, [
+                                requestIdentifier,
+                                pathMatchIdentifier,
+                                contextIdentifier,
+                            ]),
                         ),
                     ]),
                 ),
@@ -50,13 +54,10 @@ export function compilePath(
 
         nodes.push(builders.returnStatement(buildValidationError('method not supported')));
 
-        return builders.functionDeclaration(functionId,
-            [
-                requestIdentifier,
-                pathMatchIdentifier,
-                contextIdentifier,
-            ],
-            builders.blockStatement(nodes)
-        )
+        return builders.functionDeclaration(
+            functionId,
+            [requestIdentifier, pathMatchIdentifier, contextIdentifier],
+            builders.blockStatement(nodes),
+        );
     });
 }

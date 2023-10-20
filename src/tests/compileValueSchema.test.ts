@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'bun:test';
 import { Compiler } from '../compiler';
 import { compileValueSchema } from '../compileValueSchema';
 

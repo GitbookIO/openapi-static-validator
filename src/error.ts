@@ -41,4 +41,3 @@ export function buildValidationError(message: string) {
         builders.literal(message),
     ]);
 }
-

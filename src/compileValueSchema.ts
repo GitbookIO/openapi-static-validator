@@ -215,17 +215,15 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
 
         nodes.push(
             builders.ifStatement(
-                builders.logicalExpression('||', 
-                builders.binaryExpression(
-                    '!==',
-                    builders.unaryExpression('typeof', value),
-                    builders.literal('object'),
+                builders.logicalExpression(
+                    '||',
+                    builders.binaryExpression(
+                        '!==',
+                        builders.unaryExpression('typeof', value),
+                        builders.literal('object'),
+                    ),
+                    builders.binaryExpression('===', value, builders.literal(null)),
                 ),
-                builders.binaryExpression(
-                    '===',
-                    value,
-                    builders.literal(null),
-                )),
                 builders.blockStatement([builders.returnStatement(error('Expected an object'))]),
             ),
         );
@@ -312,7 +310,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                                 propNameLiteral,
                             ]),
                             subValueIdentifier,
-                            context
+                            context,
                         ]),
                     ),
                 ]),
@@ -340,10 +338,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
             check.push(
                 builders.expressionStatement(
                     builders.callExpression(
-                        builders.memberExpression(
-                            keysIdentifier,
-                            builders.identifier('delete'),
-                        ),
+                        builders.memberExpression(keysIdentifier, builders.identifier('delete')),
                         [propNameLiteral],
                     ),
                 ),
@@ -460,14 +455,15 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
 
         nodes.push(
             builders.ifStatement(
-                builders.unaryExpression('!',
+                builders.unaryExpression(
+                    '!',
                     builders.callExpression(
                         builders.memberExpression(
                             builders.identifier('Array'),
                             builders.identifier('isArray'),
                         ),
                         [value],
-                    )
+                    ),
                 ),
                 builders.blockStatement([builders.returnStatement(error('Expected an array'))]),
             ),
@@ -517,7 +513,7 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                         builders.newExpression(builders.identifier('Set'), []),
                     ),
                 ]),
-            )
+            );
         }
 
         const index = builders.identifier('i');
@@ -539,44 +535,38 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                     builders.variableDeclaration('const', [
                         builders.variableDeclarator(
                             itemResult,
-                            builders.callExpression(
-                                fnSchema,
-                                [
-                                    builders.arrayExpression([
-                                        builders.spreadElement(path),
-                                        index,
-                                    ]),
-                                    builders.memberExpression(value, index, true),
-                                    context,
-                                ],
-                            ),
+                            builders.callExpression(fnSchema, [
+                                builders.arrayExpression([builders.spreadElement(path), index]),
+                                builders.memberExpression(value, index, true),
+                                context,
+                            ]),
                         ),
                     ]),
-                    ...(schema.uniqueItems ? [
-                        builders.ifStatement(
-                            builders.callExpression(
-                                builders.memberExpression(
-                                    valueSet,
-                                    builders.identifier('has'),
-                                ),
-                                [itemResult],
-                            ),
-                            builders.blockStatement([
-                                builders.returnStatement(
-                                    error(`Expected unique items`),
-                                ),
-                            ])
-                        ),
-                        builders.expressionStatement(
-                            builders.callExpression(
-                                builders.memberExpression(
-                                    valueSet,
-                                    builders.identifier('add'),
-                                ),
-                                [itemResult],
-                            )
-                        )
-                    ] : []),
+                    ...(schema.uniqueItems
+                        ? [
+                              builders.ifStatement(
+                                  builders.callExpression(
+                                      builders.memberExpression(
+                                          valueSet,
+                                          builders.identifier('has'),
+                                      ),
+                                      [itemResult],
+                                  ),
+                                  builders.blockStatement([
+                                      builders.returnStatement(error(`Expected unique items`)),
+                                  ]),
+                              ),
+                              builders.expressionStatement(
+                                  builders.callExpression(
+                                      builders.memberExpression(
+                                          valueSet,
+                                          builders.identifier('add'),
+                                      ),
+                                      [itemResult],
+                                  ),
+                              ),
+                          ]
+                        : []),
                     builders.ifStatement(
                         builders.binaryExpression(
                             'instanceof',
@@ -591,11 +581,10 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                             builders.memberExpression(value, index, true),
                             itemResult,
                         ),
-                    )
-                ])
-            )
-        )
-
+                    ),
+                ]),
+            ),
+        );
 
         nodes.push(builders.returnStatement(value));
 

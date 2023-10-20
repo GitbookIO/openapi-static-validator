@@ -20,7 +20,7 @@ import { OpenAPIParsedPath, getPathParamIndex, openapiPathToRegex } from './path
 export function compileOperation(
     compiler: Compiler,
     path: OpenAPIParsedPath,
-    operation: OpenAPIOperation
+    operation: OpenAPIOperation,
 ) {
     return compiler.declareForInput(operation, (functionId) => {
         const requestIdentifier = builders.identifier('request');
@@ -35,7 +35,10 @@ export function compileOperation(
                 builders.expressionStatement(
                     builders.assignmentExpression(
                         '=',
-                        builders.memberExpression(requestIdentifier, builders.identifier('operationId')),
+                        builders.memberExpression(
+                            requestIdentifier,
+                            builders.identifier('operationId'),
+                        ),
                         builders.literal(operation.operationId),
                     ),
                 ),
@@ -43,22 +46,23 @@ export function compileOperation(
         }
 
         // Extract and validate path params
-        const pathParameters = (operation.parameters ?? []).filter((parameter) => parameter.in === 'path');
+        const pathParameters = (operation.parameters ?? []).filter(
+            (parameter) => parameter.in === 'path',
+        );
         nodes.push(
             builders.expressionStatement(
                 builders.assignmentExpression(
                     '=',
                     builders.memberExpression(requestIdentifier, builders.identifier('params')),
                     builders.objectExpression(
-                        pathParameters.map((parameter, index) => {
-                            const identifier = builders.identifier(`pathParam${index}`);
-                            const schemaFn = compileValueSchema(compiler, parameter.schema);
-                            const regexMatchIndex = getPathParamIndex(path, parameter.name);
-                
-                            nodes.push(
-                                builders.variableDeclaration(
-                                    'const',
-                                    [
+                        pathParameters
+                            .map((parameter, index) => {
+                                const identifier = builders.identifier(`pathParam${index}`);
+                                const schemaFn = compileValueSchema(compiler, parameter.schema);
+                                const regexMatchIndex = getPathParamIndex(path, parameter.name);
+
+                                nodes.push(
+                                    builders.variableDeclaration('const', [
                                         builders.variableDeclarator(
                                             identifier,
                                             builders.callExpression(schemaFn, [
@@ -74,40 +78,40 @@ export function compileOperation(
                                                 contextIdentifier,
                                             ]),
                                         ),
-                                    ],
-                                )
-                            );
-                
-                            // Return an error if the parameter is invalid
-                            nodes.push(
-                                builders.ifStatement(
-                                    builders.binaryExpression(
-                                        'instanceof',
-                                        identifier,
-                                        ValidationErrorIdentifier,
-                                    ),
-                                    builders.blockStatement([
-                                        builders.returnStatement(identifier),
                                     ]),
-                                ),
-                            );
+                                );
 
-                            return builders.property(
-                                'init',
-                                builders.identifier(parameter.name),
-                                identifier,
-                            );
-                        }).flat()
+                                // Return an error if the parameter is invalid
+                                nodes.push(
+                                    builders.ifStatement(
+                                        builders.binaryExpression(
+                                            'instanceof',
+                                            identifier,
+                                            ValidationErrorIdentifier,
+                                        ),
+                                        builders.blockStatement([
+                                            builders.returnStatement(identifier),
+                                        ]),
+                                    ),
+                                );
+
+                                return builders.property(
+                                    'init',
+                                    builders.identifier(parameter.name),
+                                    identifier,
+                                );
+                            })
+                            .flat(),
                     ),
                 ),
             ),
         );
 
         // Validate query parameters
-        const queryParameters = (operation.parameters ?? []).filter((parameter) => parameter.in === 'path');
-        queryParameters.forEach((parameter) => {
-
-        });
+        const queryParameters = (operation.parameters ?? []).filter(
+            (parameter) => parameter.in === 'path',
+        );
+        queryParameters.forEach((parameter) => {});
 
         // Validate the body against the schema
         if (operation.requestBody) {
@@ -116,7 +120,10 @@ export function compileOperation(
                     builders.ifStatement(
                         builders.binaryExpression(
                             '===',
-                            builders.memberExpression(requestIdentifier, builders.identifier('body')),
+                            builders.memberExpression(
+                                requestIdentifier,
+                                builders.identifier('body'),
+                            ),
                             builders.identifier('undefined'),
                         ),
                         builders.blockStatement([
@@ -136,10 +143,11 @@ export function compileOperation(
                         builders.variableDeclarator(
                             bodyResult,
                             builders.callExpression(bodyFn, [
-                                builders.arrayExpression([
-                                    builders.literal('body'),
-                                ]),
-                                builders.memberExpression(requestIdentifier, builders.identifier('body')),
+                                builders.arrayExpression([builders.literal('body')]),
+                                builders.memberExpression(
+                                    requestIdentifier,
+                                    builders.identifier('body'),
+                                ),
                             ]),
                         ),
                     ]),
@@ -157,7 +165,10 @@ export function compileOperation(
                             builders.expressionStatement(
                                 builders.assignmentExpression(
                                     '=',
-                                    builders.memberExpression(requestIdentifier, builders.identifier('body')),
+                                    builders.memberExpression(
+                                        requestIdentifier,
+                                        builders.identifier('body'),
+                                    ),
                                     bodyResult,
                                 ),
                             ),
@@ -182,13 +193,10 @@ export function compileOperation(
 
         nodes.push(builders.returnStatement(requestIdentifier));
 
-        return builders.functionDeclaration(functionId,
-            [
-                requestIdentifier,
-                pathMatchIdentifier,
-                contextIdentifier,
-            ],
-            builders.blockStatement(nodes)
-        )
+        return builders.functionDeclaration(
+            functionId,
+            [requestIdentifier, pathMatchIdentifier, contextIdentifier],
+            builders.blockStatement(nodes),
+        );
     });
 }

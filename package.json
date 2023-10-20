@@ -1,23 +1,34 @@
 {
-    "name": "openapi-to-validate",
+    "name": "openapi-static-validator",
     "version": "0.0.0",
     "description": "Statically compile an OpenAPI spec into a JS validation function",
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "pretest": "bun run ./src/cli.ts ./tests/gitbook.json > ./tests/gitbook.validate.js",
         "test": "bun test",
-        "format": "prettier ./ --ignore-unknown --write"
+        "test:update": "bun test --update-snapshots",
+        "format": "prettier ./ --ignore-unknown --write",
+        "build": "bun build ./src/cli.ts --compile --outfile ./dist/cli",
+        "typecheck": "tsc --noEmit",
+        "prepublish": "bun run build"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "ast-types": "^0.14.2",
         "escodegen": "^2.1.0",
-        "hash-object": "^0.1.7",
+        "object-hash": "^3.0.0",
         "path-to-regexp": "^6.2.1"
     },
     "devDependencies": {
         "@types/escodegen": "^0.0.9",
-        "prettier": "^3.0.3"
+        "@types/object-hash": "^3.0.5",
+        "bun-types": "^1.0.6",
+        "prettier": "^3.0.3",
+        "typescript": "^5.2.2"
+    },
+    "bin": {
+        "openapi-static-validator": "./dist/cli"
     }
 }

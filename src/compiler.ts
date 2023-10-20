@@ -21,7 +21,11 @@ export class Compiler {
     private declarationCounter: number = 0;
 
     /** Map of identifiers defined globally */
-    private globalDeclarations: (namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration)[] = [ValidationErrorClass];
+    private globalDeclarations: (
+        | namedTypes.FunctionDeclaration
+        | namedTypes.ClassDeclaration
+        | namedTypes.VariableDeclaration
+    )[] = [ValidationErrorClass];
 
     /** Map of hashes already processed */
     private processedHashes: Set<string> = new Set();
@@ -33,7 +37,12 @@ export class Compiler {
     /**
      * Define a global identifier with a nickname.
      */
-    public declareGlobally(declaration: namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration) {
+    public declareGlobally(
+        declaration:
+            | namedTypes.FunctionDeclaration
+            | namedTypes.ClassDeclaration
+            | namedTypes.VariableDeclaration,
+    ) {
         this.globalDeclarations.push(declaration);
     }
 
@@ -42,7 +51,12 @@ export class Compiler {
      */
     public declareForInput(
         input: any,
-        gen: (id: namedTypes.Identifier) => namedTypes.FunctionDeclaration  | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration,
+        gen: (
+            id: namedTypes.Identifier,
+        ) =>
+            | namedTypes.FunctionDeclaration
+            | namedTypes.ClassDeclaration
+            | namedTypes.VariableDeclaration,
     ): namedTypes.Identifier {
         const hash = this.hashInput(input);
         const identifier = builders.identifier(hash);
@@ -104,10 +118,10 @@ export class Compiler {
      */
     public build() {
         // Index all the schema components.
-        const schemas = this.input.components?.schemas ?? {};
-        Object.values(schemas).forEach((schema) => {
-            compileValueSchema(this, schema);
-        });
+        // const schemas = this.input.components?.schemas ?? {};
+        // Object.values(schemas).forEach((schema) => {
+        //     compileValueSchema(this, schema);
+        // });
     }
 
     /**
@@ -124,7 +138,9 @@ export class Compiler {
      * Generate the JS code for the AST.
      */
     public compile() {
-        return escodegen.generate(this.ast());
+        return escodegen.generate(this.ast(), {
+            comment: true,
+        });
     }
 
     /**

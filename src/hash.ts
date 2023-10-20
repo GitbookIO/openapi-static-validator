@@ -1,4 +1,4 @@
-import hashObject from 'hash-object';
+import hashObject from 'object-hash';
 
 const PRESERVE_PROPS = [
     '$ref',

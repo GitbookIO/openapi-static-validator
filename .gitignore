@@ -1,1 +1,12 @@
+# System
+.DS_Store
+
+# Node
 node_modules/
+
+# Tests
+tests/*.validate.js
+*.tsbuildinfo
+
+# Output
+dist/

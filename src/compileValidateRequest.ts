@@ -6,20 +6,15 @@ import { compilePath } from './compilePath';
 import { buildValidationError } from './error';
 import { OpenAPIParsedPath, openapiPathToRegex } from './paths';
 
+const COMMENT = `*
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+`;
+
 /**
  * Compile a request validation function.
- * The request input is an object:
- * {
- *   path: string;
- *   method: string;
- *   body: any;
- *   query: Record<string, string>;
- *   headers: any;
- * }
- *
- * The result is the same object with added properties:
- *  - operationId: string
- *  - params: Record<string, string>
  */
 export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
     const request = builders.identifier('request');
@@ -32,7 +27,7 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
         const operationFn = compilePath(compiler, parsedPath, pathOperations);
 
         // Declare the regexp globally to avoid recompiling it at each execution
-        const regexpIdentifier = compilePathRegexp(compiler, path, parsedPath)
+        const regexpIdentifier = compilePathRegexp(compiler, path, parsedPath);
 
         // In the function, evaluate the regexp against the path
         const matchIdentifier = builders.identifier(`match${index}`);
@@ -49,21 +44,13 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
                     ),
                 ),
             ]),
-        )
+        );
         nodes.push(
             builders.ifStatement(
-                builders.binaryExpression(
-                    '!==',
-                    matchIdentifier,
-                    builders.literal(null),
-                ),
+                builders.binaryExpression('!==', matchIdentifier, builders.literal(null)),
                 builders.blockStatement([
                     builders.returnStatement(
-                        builders.callExpression(operationFn, [
-                            request,
-                            matchIdentifier,
-                            context,
-                        ]),
+                        builders.callExpression(operationFn, [request, matchIdentifier, context]),
                     ),
                 ]),
             ),
@@ -71,20 +58,20 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
     });
 
     // Otherwise, return an error
-    nodes.push(
-        builders.returnStatement(
-            buildValidationError('no operation match path'),
-        ),
-    );
+    nodes.push(builders.returnStatement(buildValidationError('no operation match path')));
 
     return [
-        builders.exportNamedDeclaration(
-            builders.functionDeclaration(
-                builders.identifier('validateRequest'),
-                [request, context],
-                builders.blockStatement(nodes),
+        {
+            ...builders.exportNamedDeclaration(
+                builders.functionDeclaration.from({
+                    id: builders.identifier('validateRequest'),
+                    params: [request, context],
+                    body: builders.blockStatement(nodes),
+                }),
             ),
-        )
+            // @ts-ignore
+            leadingComments: [builders.block(COMMENT, true)],
+        },
     ];
 }
 
@@ -103,6 +90,6 @@ function compilePathRegexp(compiler: Compiler, path: string, parsed: OpenAPIPars
                     builders.literal(regex.flags),
                 ]),
             ),
-        ])
+        ]);
     });
 }
