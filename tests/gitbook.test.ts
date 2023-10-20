@@ -213,3 +213,21 @@ test('POST orgs/apple/members/jony (null)', () => {
         },
     });
 });
+
+test('GET spaces/space_iphone-doc/content/path/apps%2Fphone', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/content/path/apps%2Fphone',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+    });
+    expect(result).toMatchObject({
+        operationId: 'getPageByPath',
+        params: {
+            spaceId: 'space_iphone-doc',
+            pagePath: 'apps/phone',
+        },
+    });
+});

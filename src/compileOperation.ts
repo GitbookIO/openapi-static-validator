@@ -64,7 +64,7 @@ export function compileOperation(
                                 const regexMatchIndex = getPathParamIndex(path, parameter.name);
 
                                 nodes.push(
-                                    builders.variableDeclaration('const', [
+                                    builders.variableDeclaration('let', [
                                         builders.variableDeclarator(
                                             identifier,
                                             builders.callExpression(schemaFn, [
@@ -81,6 +81,29 @@ export function compileOperation(
                                             ]),
                                         ),
                                     ]),
+                                );
+
+                                // Path parameters should be decoded
+                                nodes.push(
+                                    builders.ifStatement(
+                                        builders.binaryExpression(
+                                            '==',
+                                            builders.unaryExpression('typeof', identifier, true),
+                                            builders.literal('string'),
+                                        ),
+                                        builders.blockStatement([
+                                            builders.expressionStatement(
+                                                builders.assignmentExpression(
+                                                    '=',
+                                                    identifier,
+                                                    builders.callExpression(
+                                                        builders.identifier('decodeURIComponent'),
+                                                        [identifier],
+                                                    ),
+                                                ),
+                                            ),
+                                        ]),
+                                    ),
                                 );
 
                                 // Return an error if the parameter is invalid
