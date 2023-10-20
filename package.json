@@ -1,6 +1,6 @@
 {
     "name": "openapi-static-validator",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Statically compile an OpenAPI spec into a JS validation function",
     "main": "src/index.ts",
     "type": "module",
