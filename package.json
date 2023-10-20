@@ -30,7 +30,7 @@
         "typescript": "^5.2.2"
     },
     "bin": {
-        "openapi-static-validator": "./dist/cli.js"
+        "openapi-static-validator": "dist/cli.js"
     },
     "files": [
         "bin/**/*",
