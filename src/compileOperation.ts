@@ -201,67 +201,66 @@ export function compileOperation(
 
         // Validate the body against the schema
         if (operation.requestBody) {
-            if (operation.requestBody.required) {
-                nodes.push(
-                    builders.ifStatement(
-                        builders.binaryExpression(
-                            '===',
-                            builders.memberExpression(
-                                requestIdentifier,
-                                builders.identifier('body'),
-                            ),
-                            builders.identifier('undefined'),
-                        ),
-                        builders.blockStatement([
-                            builders.returnStatement(buildRequestError(400, 'body is required')),
-                        ]),
-                    ),
-                );
-            }
-
             const contentTypeSchema = operation.requestBody.content?.['application/json']?.schema;
-            if (contentTypeSchema) {
-                const bodyFn = compileValueSchema(compiler, contentTypeSchema);
-                const bodyResult = builders.identifier('body');
+            const bodyFn = contentTypeSchema
+                ? compileValueSchema(compiler, contentTypeSchema)
+                : null;
+            const bodyResult = builders.identifier('body');
 
-                nodes.push(
-                    builders.variableDeclaration('const', [
-                        builders.variableDeclarator(
-                            bodyResult,
-                            builders.callExpression(bodyFn, [
-                                builders.arrayExpression([builders.literal('body')]),
-                                builders.memberExpression(
-                                    requestIdentifier,
-                                    builders.identifier('body'),
-                                ),
-                            ]),
-                        ),
-                    ]),
-                );
-
-                nodes.push(
-                    builders.ifStatement(
-                        builders.binaryExpression(
-                            'instanceof',
-                            bodyResult,
-                            ValidationErrorIdentifier,
-                        ),
-                        builders.blockStatement([builders.returnStatement(bodyResult)]),
-                        builders.blockStatement([
-                            builders.expressionStatement(
-                                builders.assignmentExpression(
-                                    '=',
-                                    builders.memberExpression(
-                                        requestIdentifier,
-                                        builders.identifier('body'),
-                                    ),
-                                    bodyResult,
-                                ),
-                            ),
-                        ]),
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '===',
+                        builders.memberExpression(requestIdentifier, builders.identifier('body')),
+                        builders.identifier('undefined'),
                     ),
-                );
-            }
+                    builders.blockStatement(
+                        operation.requestBody.required
+                            ? [builders.returnStatement(buildRequestError(400, 'body is required'))]
+                            : [],
+                    ),
+                    builders.blockStatement(
+                        bodyFn
+                            ? [
+                                  builders.variableDeclaration('const', [
+                                      builders.variableDeclarator(
+                                          bodyResult,
+                                          builders.callExpression(bodyFn, [
+                                              builders.arrayExpression([builders.literal('body')]),
+                                              builders.memberExpression(
+                                                  requestIdentifier,
+                                                  builders.identifier('body'),
+                                              ),
+                                          ]),
+                                      ),
+                                  ]),
+                                  builders.ifStatement(
+                                      builders.binaryExpression(
+                                          'instanceof',
+                                          bodyResult,
+                                          ValidationErrorIdentifier,
+                                      ),
+                                      builders.blockStatement([
+                                          builders.returnStatement(bodyResult),
+                                      ]),
+                                      builders.blockStatement([
+                                          builders.expressionStatement(
+                                              builders.assignmentExpression(
+                                                  '=',
+                                                  builders.memberExpression(
+                                                      requestIdentifier,
+                                                      builders.identifier('body'),
+                                                  ),
+                                                  bodyResult,
+                                              ),
+                                          ),
+                                      ]),
+                                  ),
+                              ]
+                            : [],
+                    ),
+                ),
+            );
         } else {
             nodes.push(
                 builders.ifStatement(
