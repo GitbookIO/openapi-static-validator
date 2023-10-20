@@ -10,7 +10,7 @@
         "test:update": "bun test --update-snapshots",
         "format": "prettier ./ --ignore-unknown --write",
         "format:check": "prettier ./ --ignore-unknown --list-different",
-        "build": "bun build ./src/cli.ts --outfile ./dist/cli.js",
+        "build": "bun build ./src/cli.ts --target node --external object-hash --external ast-types --external escodegen --external path-to-regexp  --outfile ./dist/cli.js",
         "typecheck": "tsc --noEmit",
         "prepublish": "bun run build"
     },
