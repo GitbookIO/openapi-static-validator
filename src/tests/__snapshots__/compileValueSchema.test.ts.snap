@@ -157,6 +157,40 @@ function obj0(path, value, context) {
 }"
 `;
 
+exports[`String with pattern 2`] = `
+"/**
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+export class RequestError extends Error {
+    constructor(code, message) {
+        super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'Expected a string');
+    }
+    const formatResult = context?.formatString?.['uri']?.(value, path);
+    if (formatResult instanceof ValidationError) {
+        return formatResult;
+    }
+    return value;
+}"
+`;
+
 exports[`Objects with a required prop 1`] = `
 "/**
 Validate a request against the OpenAPI spec

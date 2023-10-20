@@ -52,6 +52,15 @@ describe('String', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('with pattern', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'string',
+            format: 'uri',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 describe('Objects', () => {

@@ -622,7 +622,7 @@ function compileNumberSchema(
 }
 
 function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
-    return compiler.declareValidationFunction(schema, ({ value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, context, path, error }) => {
         const enumCheck = compileEnumableCheck(compiler, schema, value, error);
         if (enumCheck) {
             return enumCheck;
@@ -640,6 +640,44 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                 builders.blockStatement([builders.returnStatement(error('Expected a string'))]),
             ),
         );
+
+        // Validate the format using the potential `context?.formatString?.[schema.format]`
+        if (schema.format) {
+            const formatResult = builders.identifier('formatResult');
+
+            nodes.push(
+                builders.variableDeclaration('const', [
+                    builders.variableDeclarator(
+                        formatResult,
+                        builders.callExpression.from({
+                            callee: builders.memberExpression.from({
+                                object: builders.memberExpression.from({
+                                    object: context,
+                                    property: builders.identifier('formatString'),
+                                    optional: true,
+                                }),
+                                property: builders.literal(schema.format),
+                                computed: true,
+                                optional: true,
+                            }),
+                            optional: true,
+                            arguments: [value, path],
+                        }),
+                    ),
+                ]),
+            );
+
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        'instanceof',
+                        formatResult,
+                        ValidationErrorIdentifier,
+                    ),
+                    builders.blockStatement([builders.returnStatement(formatResult)]),
+                ),
+            );
+        }
 
         if (schema.minLength) {
             nodes.push(

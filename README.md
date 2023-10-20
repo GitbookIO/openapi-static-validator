@@ -20,8 +20,6 @@ openapi-static-validator spec.json > validate.js
     -   [ ] in `cookie`
     -   [ ] in `header`
     -   [ ] in `query`
--   JSONSchema `string` validation of:
-    -   [ ] `format`
 -   JSONSchema `integer`
     -   [ ] no float
 
