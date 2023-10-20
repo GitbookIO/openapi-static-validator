@@ -9,6 +9,7 @@
         "test": "bun test",
         "test:update": "bun test --update-snapshots",
         "format": "prettier ./ --ignore-unknown --write",
+        "format:check": "prettier ./ --ignore-unknown --list-different",
         "build": "bun build ./src/cli.ts --compile --outfile ./dist/cli",
         "typecheck": "tsc --noEmit",
         "prepublish": "bun run build"

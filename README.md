@@ -33,6 +33,7 @@ openapi-static-validator spec.json > validate.js
 ## Development
 
 To publish the package:
-- Change version in `package.json`
-- Commit the change and tag it
-- Run `npm publish`
+
+-   Change version in `package.json`
+-   Commit the change and tag it
+-   Run `npm publish`
