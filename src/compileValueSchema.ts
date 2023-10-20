@@ -696,7 +696,7 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                             callee: builders.memberExpression.from({
                                 object: builders.memberExpression.from({
                                     object: context,
-                                    property: builders.identifier('formatString'),
+                                    property: builders.identifier('stringFormats'),
                                     optional: true,
                                 }),
                                 property: builders.literal(schema.format),

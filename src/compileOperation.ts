@@ -231,6 +231,7 @@ export function compileOperation(
                                                   requestIdentifier,
                                                   builders.identifier('body'),
                                               ),
+                                              contextIdentifier,
                                           ]),
                                       ),
                                   ]),

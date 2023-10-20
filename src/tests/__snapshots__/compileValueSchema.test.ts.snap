@@ -228,7 +228,7 @@ function obj0(path, value, context) {
     if (typeof value !== 'string') {
         return new ValidationError(path, 'expected a string');
     }
-    const formatResult = context?.formatString?.['uri']?.(value, path);
+    const formatResult = context?.stringFormats?.['uri']?.(value, path);
     if (formatResult instanceof ValidationError) {
         return formatResult;
     }
