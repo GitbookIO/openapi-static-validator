@@ -1,8 +1,8 @@
 {
     "name": "openapi-static-validator",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Statically compile an OpenAPI spec into a JS validation function",
-    "main": "index.js",
+    "main": "src/index.ts",
     "type": "module",
     "scripts": {
         "pretest": "bun run ./src/cli.ts ./tests/gitbook.json > ./tests/gitbook.validate.js",
