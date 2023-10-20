@@ -93,7 +93,7 @@ function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
             );
         });
 
-        nodes.push(builders.returnStatement(error('Expected one of the anyOf schemas to match')));
+        nodes.push(builders.returnStatement(error('expected one of the anyOf schemas to match')));
 
         return nodes;
     });
@@ -147,7 +147,7 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
                                       ),
                                       builders.blockStatement([
                                           builders.returnStatement(
-                                              error('Expected to only match one of the schemas'),
+                                              error('expected to only match one of the schemas'),
                                           ),
                                       ]),
                                   ),
@@ -224,7 +224,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                     ),
                     builders.binaryExpression('===', value, builders.literal(null)),
                 ),
-                builders.blockStatement([builders.returnStatement(error('Expected an object'))]),
+                builders.blockStatement([builders.returnStatement(error('expected an object'))]),
             ),
         );
 
@@ -259,7 +259,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected at least ${schema.minProperties} properties`),
+                            error(`expected at least ${schema.minProperties} properties`),
                         ),
                     ]),
                 ),
@@ -276,7 +276,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected at most ${schema.maxProperties} properties`),
+                            error(`expected at most ${schema.maxProperties} properties`),
                         ),
                     ]),
                 ),
@@ -354,7 +354,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                     builders.blockStatement(check),
                     schema.required?.includes(key)
                         ? builders.blockStatement([
-                              builders.returnStatement(error(`Expected "${key}" to be defined`)),
+                              builders.returnStatement(error(`expected "${key}" to be defined`)),
                           ])
                         : subSchema.default !== undefined
                         ? builders.blockStatement([
@@ -381,7 +381,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                         builders.literal(0),
                     ),
                     builders.blockStatement([
-                        builders.returnStatement(error(`Unexpected properties`)),
+                        builders.returnStatement(error(`unexpected properties`)),
                     ]),
                 ),
             );
@@ -465,7 +465,7 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                         [value],
                     ),
                 ),
-                builders.blockStatement([builders.returnStatement(error('Expected an array'))]),
+                builders.blockStatement([builders.returnStatement(error('expected an array'))]),
             ),
         );
 
@@ -479,7 +479,7 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected at least ${schema.minItems} items`),
+                            error(`expected at least ${schema.minItems} items`),
                         ),
                     ]),
                 ),
@@ -496,7 +496,7 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected at most ${schema.maxItems} items`),
+                            error(`expected at most ${schema.maxItems} items`),
                         ),
                     ]),
                 ),
@@ -553,7 +553,7 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                                       [itemResult],
                                   ),
                                   builders.blockStatement([
-                                      builders.returnStatement(error(`Expected unique items`)),
+                                      builders.returnStatement(error(`expected unique items`)),
                                   ]),
                               ),
                               builders.expressionStatement(
@@ -611,7 +611,7 @@ function compileNumberSchema(
                     builders.unaryExpression('typeof', value),
                     builders.literal('number'),
                 ),
-                builders.blockStatement([builders.returnStatement(error('Expected a number'))]),
+                builders.blockStatement([builders.returnStatement(error('expected a number'))]),
             ),
         );
 
@@ -637,7 +637,7 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                     builders.unaryExpression('typeof', value),
                     builders.literal('string'),
                 ),
-                builders.blockStatement([builders.returnStatement(error('Expected a string'))]),
+                builders.blockStatement([builders.returnStatement(error('expected a string'))]),
             ),
         );
 
@@ -689,7 +689,7 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected at least ${schema.minLength} characters`),
+                            error(`expected at least ${schema.minLength} characters`),
                         ),
                     ]),
                 ),
@@ -706,7 +706,7 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected at most ${schema.maxLength} characters`),
+                            error(`expected at most ${schema.maxLength} characters`),
                         ),
                     ]),
                 ),
@@ -737,7 +737,7 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            error(`Expected to match the pattern "${schema.pattern}"`),
+                            error(`expected to match the pattern "${schema.pattern}"`),
                         ),
                     ]),
                 ),
@@ -766,7 +766,7 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
                     builders.unaryExpression('typeof', value),
                     builders.literal('boolean'),
                 ),
-                builders.blockStatement([builders.returnStatement(error('Expected a boolean'))]),
+                builders.blockStatement([builders.returnStatement(error('expected a boolean'))]),
             ),
         );
 
@@ -824,7 +824,7 @@ function compileEnumableCheck(
                 null as namedTypes.BinaryExpression | namedTypes.LogicalExpression | null,
             )!,
             builders.blockStatement([
-                builders.returnStatement(error('Expected one of the enum value')),
+                builders.returnStatement(error('expected one of the enum value')),
             ]),
         ),
         builders.returnStatement(value),

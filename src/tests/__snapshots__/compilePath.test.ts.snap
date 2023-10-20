@@ -18,13 +18,13 @@ function obj1(path, value, context) {
 }
 function obj4(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj3(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
@@ -40,7 +40,7 @@ function obj3(path, value, context) {
         keys.delete('foo');
     }
     if (keys.size > 0) {
-        return new ValidationError(path, 'Unexpected properties');
+        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }

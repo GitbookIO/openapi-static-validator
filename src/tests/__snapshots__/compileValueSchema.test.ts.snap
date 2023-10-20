@@ -24,7 +24,7 @@ export class ValidationError extends RequestError {
 }
 function obj0(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }"
@@ -54,7 +54,7 @@ export class ValidationError extends RequestError {
 }
 function obj0(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }"
@@ -87,7 +87,7 @@ function obj0(path, value, context) {
         return value;
     }
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }"
@@ -117,7 +117,7 @@ export class ValidationError extends RequestError {
 }
 function obj0(path, value, context) {
     if (value !== 'a' && value !== 'b' && value !== 'c') {
-        return new ValidationError(path, 'Expected one of the enum value');
+        return new ValidationError(path, 'expected one of the enum value');
     }
     return value;
 }"
@@ -148,10 +148,10 @@ export class ValidationError extends RequestError {
 const obj1 = new RegExp('^[a-z]+$');
 function obj0(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     if (!obj1.test(value)) {
-        return new ValidationError(path, 'Expected to match the pattern "^[a-z]+$"');
+        return new ValidationError(path, 'expected to match the pattern "^[a-z]+$"');
     }
     return value;
 }"
@@ -181,7 +181,7 @@ export class ValidationError extends RequestError {
 }
 function obj0(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     const formatResult = context?.formatString?.['uri']?.(value, path);
     if (formatResult instanceof ValidationError) {
@@ -215,19 +215,19 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj2(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
 function obj0(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
@@ -242,7 +242,7 @@ function obj0(path, value, context) {
         value['foo'] = result0;
         keys.delete('foo');
     } else {
-        return new ValidationError(path, 'Expected "foo" to be defined');
+        return new ValidationError(path, 'expected "foo" to be defined');
     }
     const value1 = value['bar'];
     if (value1 !== undefined) {
@@ -257,7 +257,7 @@ function obj0(path, value, context) {
         keys.delete('bar');
     }
     if (keys.size > 0) {
-        return new ValidationError(path, 'Unexpected properties');
+        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }"
@@ -287,13 +287,13 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj0(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
@@ -311,7 +311,7 @@ function obj0(path, value, context) {
         value['foo'] = 10;
     }
     if (keys.size > 0) {
-        return new ValidationError(path, 'Unexpected properties');
+        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }"
@@ -341,7 +341,7 @@ export class ValidationError extends RequestError {
 }
 function obj0(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     return value;
@@ -372,13 +372,13 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj0(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
@@ -423,19 +423,19 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj2(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
 function obj0(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
@@ -490,14 +490,14 @@ export class ValidationError extends RequestError {
 }
 function obj0(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     if (keys.size < 1) {
-        return new ValidationError(path, 'Expected at least 1 properties');
+        return new ValidationError(path, 'expected at least 1 properties');
     }
     if (keys.size > 10) {
-        return new ValidationError(path, 'Expected at most 10 properties');
+        return new ValidationError(path, 'expected at most 10 properties');
     }
     return value;
 }"
@@ -527,19 +527,19 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
 function obj0(path, value, context) {
     if (!Array.isArray(value)) {
-        return new ValidationError(path, 'Expected an array');
+        return new ValidationError(path, 'expected an array');
     }
     if (value.length < 1) {
-        return new ValidationError(path, 'Expected at least 1 items');
+        return new ValidationError(path, 'expected at least 1 items');
     }
     if (value.length > 10) {
-        return new ValidationError(path, 'Expected at most 10 items');
+        return new ValidationError(path, 'expected at most 10 items');
     }
     for (let i = 0; i < value.length; i++) {
         const itemResult = obj1([
@@ -579,13 +579,13 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
 function obj0(path, value, context) {
     if (!Array.isArray(value)) {
-        return new ValidationError(path, 'Expected an array');
+        return new ValidationError(path, 'expected an array');
     }
     const valueSet = new Set();
     for (let i = 0; i < value.length; i++) {
@@ -594,7 +594,7 @@ function obj0(path, value, context) {
             i
         ], value[i], context);
         if (valueSet.has(itemResult)) {
-            return new ValidationError(path, 'Expected unique items');
+            return new ValidationError(path, 'expected unique items');
         }
         valueSet.add(itemResult);
         if (itemResult instanceof ValidationError) {
@@ -630,13 +630,13 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj2(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
@@ -649,7 +649,7 @@ function obj0(path, value, context) {
     if (!(value1 instanceof ValidationError)) {
         return value1;
     }
-    return new ValidationError(path, 'Expected one of the anyOf schemas to match');
+    return new ValidationError(path, 'expected one of the anyOf schemas to match');
 }"
 `;
 
@@ -677,13 +677,13 @@ export class ValidationError extends RequestError {
 }
 function obj1(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj2(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
@@ -697,7 +697,7 @@ function obj0(path, value, context) {
     if (!(alt1 instanceof ValidationError)) {
         result = alt1;
         if (result !== undefined) {
-            return new ValidationError(path, 'Expected to only match one of the schemas');
+            return new ValidationError(path, 'expected to only match one of the schemas');
         }
     }
     return result;
@@ -728,13 +728,13 @@ export class ValidationError extends RequestError {
 }
 function obj2(path, value, context) {
     if (typeof value !== 'number') {
-        return new ValidationError(path, 'Expected a number');
+        return new ValidationError(path, 'expected a number');
     }
     return value;
 }
 function obj1(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['a'];
@@ -750,19 +750,19 @@ function obj1(path, value, context) {
         keys.delete('a');
     }
     if (keys.size > 0) {
-        return new ValidationError(path, 'Unexpected properties');
+        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }
 function obj4(path, value, context) {
     if (typeof value !== 'string') {
-        return new ValidationError(path, 'Expected a string');
+        return new ValidationError(path, 'expected a string');
     }
     return value;
 }
 function obj3(path, value, context) {
     if (typeof value !== 'object' || value === null) {
-        return new ValidationError(path, 'Expected an object');
+        return new ValidationError(path, 'expected an object');
     }
     const keys = new Set(Object.keys(value));
     const value0 = value['b'];
@@ -778,7 +778,7 @@ function obj3(path, value, context) {
         keys.delete('b');
     }
     if (keys.size > 0) {
-        return new ValidationError(path, 'Unexpected properties');
+        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }
