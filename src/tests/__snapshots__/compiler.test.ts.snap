@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components ref 1`] = `
-"export function validateRequest(request) {
+"export function validateRequest(request, context) {
     return new ValidationError([], 'no operation match path');
 }
 class ValidationError extends Error {
@@ -10,19 +10,19 @@ class ValidationError extends Error {
         this.path = path;
     }
 }
-function obj0(path, value) {
+function obj0(path, value, context) {
     if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
-function obj2(path, value) {
+function obj2(path, value, context) {
     if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
-function obj1(path, value) {
+function obj1(path, value, context) {
     if (typeof value !== 'object' || value === null) {
         return new ValidationError(path, 'Expected an object');
     }
@@ -32,7 +32,7 @@ function obj1(path, value) {
         const result0 = obj2([
             ...path,
             'foo'
-        ], value0);
+        ], value0, context);
         if (result0 instanceof ValidationError) {
             return result0;
         }
@@ -44,7 +44,7 @@ function obj1(path, value) {
         const result1 = obj0([
             ...path,
             'bar'
-        ], value1);
+        ], value1, context);
         if (result1 instanceof ValidationError) {
             return result1;
         }
@@ -59,7 +59,7 @@ function obj1(path, value) {
 `;
 
 exports[`recursive refs 1`] = `
-"export function validateRequest(request) {
+"export function validateRequest(request, context) {
     return new ValidationError([], 'no operation match path');
 }
 class ValidationError extends Error {
@@ -68,19 +68,19 @@ class ValidationError extends Error {
         this.path = path;
     }
 }
-function obj0(path, value) {
+function obj0(path, value, context) {
     if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
-function obj2(path, value) {
+function obj2(path, value, context) {
     if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
-function obj1(path, value) {
+function obj1(path, value, context) {
     if (typeof value !== 'object' || value === null) {
         return new ValidationError(path, 'Expected an object');
     }
@@ -90,7 +90,7 @@ function obj1(path, value) {
         const result0 = obj2([
             ...path,
             'foo'
-        ], value0);
+        ], value0, context);
         if (result0 instanceof ValidationError) {
             return result0;
         }
@@ -102,7 +102,7 @@ function obj1(path, value) {
         const result1 = obj0([
             ...path,
             'bar'
-        ], value1);
+        ], value1, context);
         if (result1 instanceof ValidationError) {
             return result1;
         }
@@ -114,7 +114,7 @@ function obj1(path, value) {
         const result2 = obj1([
             ...path,
             'rec'
-        ], value2);
+        ], value2, context);
         if (result2 instanceof ValidationError) {
             return result2;
         }

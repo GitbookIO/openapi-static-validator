@@ -66,12 +66,15 @@ export class Compiler {
             value: namedTypes.Identifier;
             /** Identifier for the path argument being passed to the function */
             path: namedTypes.Identifier;
+            /** Identifier for the context argument being passed to the function */
+            context: namedTypes.Identifier;
             /** Generate an error */
             error: (message: string) => namedTypes.NewExpression;
         }) => namedTypes.BlockStatement['body'],
     ) {
         const pathIdentifier = builders.identifier('path');
         const valueIdentifier = builders.identifier('value');
+        const contextIdentifier = builders.identifier('context');
 
         const error = (message: string) => {
             return builders.newExpression(ValidationErrorIdentifier, [
@@ -83,11 +86,12 @@ export class Compiler {
         return this.declareForInput(input, (id) => {
             return builders.functionDeclaration(
                 id,
-                [pathIdentifier, valueIdentifier],
+                [pathIdentifier, valueIdentifier, contextIdentifier],
                 builders.blockStatement(
                     gen({
                         value: valueIdentifier,
                         path: pathIdentifier,
+                        context: contextIdentifier,
                         error,
                     }),
                 ),

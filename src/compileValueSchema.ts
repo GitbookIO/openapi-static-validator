@@ -59,7 +59,7 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
 }
 
 function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
-    return compiler.declareValidationFunction(schema, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, path, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         schema.anyOf.forEach((subSchema, index) => {
@@ -73,7 +73,7 @@ function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
                 builders.variableDeclaration('const', [
                     builders.variableDeclarator(
                         identifier,
-                        builders.callExpression(fnIdentifier, [path, value]),
+                        builders.callExpression(fnIdentifier, [path, value, context]),
                     ),
                 ]),
             );
@@ -100,7 +100,7 @@ function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
 }
 
 function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
-    return compiler.declareValidationFunction(schema, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, path, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         // Declare the variable to use as a result, then iterate over each schema
@@ -118,7 +118,7 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
                 builders.variableDeclaration('const', [
                     builders.variableDeclarator(
                         altIdentifier,
-                        builders.callExpression(fnIdentifier, [path, value]),
+                        builders.callExpression(fnIdentifier, [path, value, context]),
                     ),
                 ]),
             );
@@ -165,7 +165,7 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
 }
 
 function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
-    return compiler.declareValidationFunction(schema, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, path, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         const resultIdentifier = builders.identifier('result');
@@ -183,7 +183,7 @@ function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
                     builders.assignmentExpression(
                         '=',
                         resultIdentifier,
-                        builders.callExpression(fnIdentifier, [path, resultIdentifier]),
+                        builders.callExpression(fnIdentifier, [path, resultIdentifier, context]),
                     ),
                 ),
             );
@@ -207,7 +207,7 @@ function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
 }
 
 function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
-    return compiler.declareValidationFunction(schema, ({ path, value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ path, value, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
         const endNodes: namedTypes.BlockStatement['body'] = [];
 
@@ -312,6 +312,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                                 propNameLiteral,
                             ]),
                             subValueIdentifier,
+                            context
                         ]),
                     ),
                 ]),
@@ -412,6 +413,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                                             property: builders.identifier('key'),
                                             computed: true,
                                         }),
+                                        context,
                                     ],
                                 ),
                             ),
@@ -451,7 +453,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
 }
 
 function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
-    return compiler.declareValidationFunction(schema, ({ path, value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ path, value, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         nodes.push(...compileNullableCheck(compiler, schema, value));
@@ -545,6 +547,7 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                                         index,
                                     ]),
                                     builders.memberExpression(value, index, true),
+                                    context,
                                 ],
                             ),
                         ),

@@ -16,7 +16,7 @@ import { compileOperation } from './compileOperation';
  * }
  */
 export function compilePath(compiler: Compiler, pathOperations: OpenAPIPath) {
-    return compiler.declareValidationFunction(pathOperations, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(pathOperations, ({ value, path, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         Object.entries(pathOperations).forEach(([method, operation]) => {
@@ -31,7 +31,7 @@ export function compilePath(compiler: Compiler, pathOperations: OpenAPIPath) {
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            builders.callExpression(fnOperation, [path, value]),
+                            builders.callExpression(fnOperation, [path, value, context]),
                         ),
                     ]),
                 ),

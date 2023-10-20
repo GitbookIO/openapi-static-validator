@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`with get and post 1`] = `
-"export function validateRequest(request) {
+"export function validateRequest(request, context) {
     return new ValidationError([], 'no operation match path');
 }
 class ValidationError extends Error {
@@ -10,19 +10,19 @@ class ValidationError extends Error {
         this.path = path;
     }
 }
-function obj1(path, value) {
+function obj1(path, value, context) {
     if (value.body !== undefined) {
         return new ValidationError(path, 'body is not allowed');
     }
     return value;
 }
-function obj4(path, value) {
+function obj4(path, value, context) {
     if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
-function obj3(path, value) {
+function obj3(path, value, context) {
     if (typeof value !== 'object' || value === null) {
         return new ValidationError(path, 'Expected an object');
     }
@@ -32,7 +32,7 @@ function obj3(path, value) {
         const result0 = obj4([
             ...path,
             'foo'
-        ], value0);
+        ], value0, context);
         if (result0 instanceof ValidationError) {
             return result0;
         }
@@ -44,7 +44,7 @@ function obj3(path, value) {
     }
     return value;
 }
-function obj2(path, value) {
+function obj2(path, value, context) {
     if (value.body === undefined) {
         return new ValidationError(path, 'body is required');
     }
@@ -59,12 +59,12 @@ function obj2(path, value) {
     }
     return value;
 }
-function obj0(path, value) {
+function obj0(path, value, context) {
     if (value.method === 'get') {
-        return obj1(path, value);
+        return obj1(path, value, context);
     }
     if (value.method === 'post') {
-        return obj2(path, value);
+        return obj2(path, value, context);
     }
     return new ValidationError(path, 'method not supported');
 }"

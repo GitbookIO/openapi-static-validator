@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`With body without 1`] = `
-"export function validateRequest(request) {
+"export function validateRequest(request, context) {
     return new ValidationError([], 'no operation match path');
 }
 class ValidationError extends Error {
@@ -10,7 +10,7 @@ class ValidationError extends Error {
         this.path = path;
     }
 }
-function obj0(path, value) {
+function obj0(path, value, context) {
     if (value.body !== undefined) {
         return new ValidationError(path, 'body is not allowed');
     }
@@ -19,7 +19,7 @@ function obj0(path, value) {
 `;
 
 exports[`With body required 1`] = `
-"export function validateRequest(request) {
+"export function validateRequest(request, context) {
     return new ValidationError([], 'no operation match path');
 }
 class ValidationError extends Error {
@@ -28,13 +28,13 @@ class ValidationError extends Error {
         this.path = path;
     }
 }
-function obj2(path, value) {
+function obj2(path, value, context) {
     if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
-function obj1(path, value) {
+function obj1(path, value, context) {
     if (typeof value !== 'object' || value === null) {
         return new ValidationError(path, 'Expected an object');
     }
@@ -44,7 +44,7 @@ function obj1(path, value) {
         const result0 = obj2([
             ...path,
             'foo'
-        ], value0);
+        ], value0, context);
         if (result0 instanceof ValidationError) {
             return result0;
         }
@@ -56,7 +56,7 @@ function obj1(path, value) {
     }
     return value;
 }
-function obj0(path, value) {
+function obj0(path, value, context) {
     if (value.body === undefined) {
         return new ValidationError(path, 'body is required');
     }

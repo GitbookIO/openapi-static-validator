@@ -23,6 +23,7 @@ import { ValidationErrorIdentifier } from './error';
  */
 export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
     const request = builders.identifier('request');
+    const context = builders.identifier('context');
 
     const nodes: namedTypes.Program['body'] = [];
     const functionNodes: namedTypes.FunctionDeclaration['body']['body'] = [];
@@ -63,6 +64,7 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
                         builders.callExpression(operationFn, [
                             builders.arrayExpression([]),
                             request,
+                            context,
                         ]),
                     ),
                 ]),
@@ -84,7 +86,7 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
         builders.exportNamedDeclaration(
             builders.functionDeclaration(
                 builders.identifier('validateRequest'),
-                [request],
+                [request, context],
                 builders.blockStatement(functionNodes),
             ),
         ),

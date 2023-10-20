@@ -17,7 +17,7 @@ import { compileValueSchema } from './compileValueSchema';
  * }
  */
 export function compileParameter(compiler: Compiler, parameter: OpenAPIParameter) {
-    return compiler.declareValidationFunction(parameter, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(parameter, ({ value, path, context, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         const paramValue = builders.memberExpression(
@@ -43,7 +43,7 @@ export function compileParameter(compiler: Compiler, parameter: OpenAPIParameter
             builders.variableDeclaration('const', [
                 builders.variableDeclarator(
                     builders.identifier('result'),
-                    builders.callExpression(schemaFn, [path, paramValue]),
+                    builders.callExpression(schemaFn, [path, paramValue, context]),
                 ),
             ]),
         );
