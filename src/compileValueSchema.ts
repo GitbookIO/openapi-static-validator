@@ -213,6 +213,23 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
 
         nodes.push(...compileNullableCheck(compiler, schema, value));
 
+        nodes.push(
+            builders.ifStatement(
+                builders.logicalExpression('||', 
+                builders.binaryExpression(
+                    '!==',
+                    builders.unaryExpression('typeof', value),
+                    builders.literal('object'),
+                ),
+                builders.binaryExpression(
+                    '===',
+                    value,
+                    builders.identifier('null'),
+                )),
+                builders.blockStatement([builders.returnStatement(error('Expected an object'))]),
+            ),
+        );
+
         // Define a variable to be all the keys in `value`
         const keysIdentifier = builders.identifier('keys');
 
@@ -318,20 +335,18 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                 ),
             ];
 
-            if (schema.additionalProperties) {
-                // Remove the key from the keys set
-                check.push(
-                    builders.expressionStatement(
-                        builders.callExpression(
-                            builders.memberExpression(
-                                keysIdentifier,
-                                builders.identifier('delete'),
-                            ),
-                            [propNameLiteral],
+            // Remove the key from the keys set
+            check.push(
+                builders.expressionStatement(
+                    builders.callExpression(
+                        builders.memberExpression(
+                            keysIdentifier,
+                            builders.identifier('delete'),
                         ),
+                        [propNameLiteral],
                     ),
-                );
-            }
+                ),
+            );
 
             nodes.push(
                 builders.ifStatement(
@@ -461,13 +476,10 @@ function compileNumberSchema(
         nodes.push(...compileNullableCheck(compiler, schema, value));
         nodes.push(
             builders.ifStatement(
-                builders.unaryExpression(
-                    '!',
-                    builders.binaryExpression(
-                        '===',
-                        builders.unaryExpression('typeof', value),
-                        builders.literal('number'),
-                    ),
+                builders.binaryExpression(
+                    '!==',
+                    builders.unaryExpression('typeof', value),
+                    builders.literal('number'),
                 ),
                 builders.blockStatement([builders.returnStatement(error('Expected a number'))]),
             ),
@@ -490,13 +502,10 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
         nodes.push(...compileNullableCheck(compiler, schema, value));
         nodes.push(
             builders.ifStatement(
-                builders.unaryExpression(
-                    '!',
-                    builders.binaryExpression(
-                        '===',
-                        builders.unaryExpression('typeof', value),
-                        builders.literal('string'),
-                    ),
+                builders.binaryExpression(
+                    '!==',
+                    builders.unaryExpression('typeof', value),
+                    builders.literal('string'),
                 ),
                 builders.blockStatement([builders.returnStatement(error('Expected a string'))]),
             ),
@@ -584,13 +593,10 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
         nodes.push(...compileNullableCheck(compiler, schema, value));
         nodes.push(
             builders.ifStatement(
-                builders.unaryExpression(
-                    '!',
-                    builders.binaryExpression(
-                        '===',
-                        builders.unaryExpression('typeof', value),
-                        builders.literal('boolean'),
-                    ),
+                builders.binaryExpression(
+                    '!==',
+                    builders.unaryExpression('typeof', value),
+                    builders.literal('boolean'),
                 ),
                 builders.blockStatement([builders.returnStatement(error('Expected a boolean'))]),
             ),
