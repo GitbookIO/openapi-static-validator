@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Compiler } from './compiler';
 import { readFileSync } from 'node:fs';
 

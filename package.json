@@ -10,7 +10,7 @@
         "test:update": "bun test --update-snapshots",
         "format": "prettier ./ --ignore-unknown --write",
         "format:check": "prettier ./ --ignore-unknown --list-different",
-        "build": "bun build ./src/cli.ts --compile --outfile ./dist/cli",
+        "build": "bun build ./src/cli.ts --outfile ./dist/cli.js",
         "typecheck": "tsc --noEmit",
         "prepublish": "bun run build"
     },
@@ -30,6 +30,12 @@
         "typescript": "^5.2.2"
     },
     "bin": {
-        "openapi-static-validator": "./dist/cli"
-    }
+        "openapi-static-validator": "./dist/cli.js"
+    },
+    "files": [
+        "bin/**/*",
+        "src/**/*",
+        "!src/tests/**/*",
+        "!src/**/*.test.ts"
+    ]
 }
