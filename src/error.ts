@@ -1,13 +1,11 @@
 import { namedTypes, builders } from 'ast-types';
 
-export const ValidationErrorIdentifier: namedTypes.Identifier = {
-    type: 'Identifier',
-    name: 'ValidationError',
-};
+export const ValidationErrorIdentifier = builders.identifier('ValidationError');
 
-export const ValidationErrorClass = builders.classDeclaration(
-    builders.identifier('ValidationError'),
-    builders.classBody([
+export const ValidationErrorClass = builders.classDeclaration.from({
+    id: ValidationErrorIdentifier,
+    superClass: builders.identifier('Error'),
+    body: builders.classBody([
         builders.methodDefinition(
             'constructor',
             builders.identifier('constructor'),
@@ -32,4 +30,4 @@ export const ValidationErrorClass = builders.classDeclaration(
             ),
         ),
     ]),
-);
+});

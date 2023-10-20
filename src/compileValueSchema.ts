@@ -56,7 +56,6 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
     }
 
     return compileAnySchema(compiler, schema);
-
 }
 
 function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
@@ -171,7 +170,9 @@ function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
 
         const resultIdentifier = builders.identifier('result');
         nodes.push(
-            builders.variableDeclaration('let', [builders.variableDeclarator(resultIdentifier, value)]),
+            builders.variableDeclaration('let', [
+                builders.variableDeclarator(resultIdentifier, value),
+            ]),
         );
 
         schema.allOf.forEach((subSchema, index) => {
@@ -194,11 +195,9 @@ function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
                         resultIdentifier,
                         ValidationErrorIdentifier,
                     ),
-                    builders.blockStatement([
-                        builders.returnStatement(resultIdentifier),
-                    ]),
-                )
-            )
+                    builders.blockStatement([builders.returnStatement(resultIdentifier)]),
+                ),
+            );
         });
 
         nodes.push(builders.returnStatement(resultIdentifier));
@@ -538,12 +537,9 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
     });
 }
 
-
 function compileAnySchema(compiler: Compiler, schema: object) {
     return compiler.defineValidationFunction(schema, ({ value }) => {
-        return [
-            builders.returnStatement(value)
-        ];
+        return [builders.returnStatement(value)];
     });
 }
 

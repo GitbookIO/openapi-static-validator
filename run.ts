@@ -1,4 +1,4 @@
-import { Compiler } from "./src";
+import { Compiler } from './src';
 
 const spec = require('./openapi.all.json');
 const compiler = new Compiler(spec);

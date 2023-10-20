@@ -29,7 +29,10 @@ const PRESERVE_PROPS = [
     'put',
     'delete',
     'patch',
-]
+    'operationId',
+    'parameters',
+    'responses',
+];
 
 /**
  * Hash an object only taking the important properties into account.

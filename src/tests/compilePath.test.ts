@@ -13,7 +13,7 @@ test('with get and post', () => {
                         type: 'number',
                     },
                 },
-            ]
+            ],
         },
         post: {
             requestBody: {
@@ -30,8 +30,8 @@ test('with get and post', () => {
                         },
                     },
                 },
-            }
-        }
+            },
+        },
     });
     console.log(compiler.compile());
     expect(compiler.compile()).toMatchSnapshot();

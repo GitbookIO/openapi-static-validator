@@ -165,13 +165,13 @@ test('allOf', () => {
                 type: 'object',
                 properties: {
                     a: { type: 'number' },
-                }
+                },
             },
             {
                 type: 'object',
                 properties: {
                     b: { type: 'string' },
-                }
+                },
             },
         ],
     });

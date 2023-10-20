@@ -25,7 +25,7 @@ describe('With body', () => {
                         },
                     },
                 },
-            }
+            },
         });
         expect(compiler.compile()).toMatchSnapshot();
     });

@@ -4,6 +4,7 @@ import { ValidationErrorClass, ValidationErrorIdentifier } from './error';
 import { OpenAPIRef, OpenAPISpec } from './types';
 import { compileValueSchema } from './compileValueSchema';
 import { hash } from './hash';
+import { compileValidateRequest } from './compileValidateRequest';
 
 /**
  * Compiler for OpenAPI specs.
@@ -97,7 +98,10 @@ export class Compiler {
      * Return the AST for the program.
      */
     public ast() {
-        return builders.program([...this.functions.values()]);
+        return builders.program([
+            ...compileValidateRequest(this, this.input),
+            ...this.functions.values(),
+        ]);
     }
 
     /**
