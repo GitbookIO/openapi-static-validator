@@ -59,7 +59,7 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
 }
 
 function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
-    return compiler.defineValidationFunction(schema, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, path, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         schema.anyOf.forEach((subSchema, index) => {
@@ -100,7 +100,7 @@ function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
 }
 
 function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
-    return compiler.defineValidationFunction(schema, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, path, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         // Declare the variable to use as a result, then iterate over each schema
@@ -165,7 +165,7 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
 }
 
 function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
-    return compiler.defineValidationFunction(schema, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, path, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         const resultIdentifier = builders.identifier('result');
@@ -207,7 +207,7 @@ function compileAllOfSchema(compiler: Compiler, schema: OpenAPIAllOfSchema) {
 }
 
 function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
-    return compiler.defineValidationFunction(schema, ({ path, value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ path, value, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
         const endNodes: namedTypes.BlockStatement['body'] = [];
 
@@ -436,7 +436,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
 }
 
 function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
-    return compiler.defineValidationFunction(schema, ({ value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         nodes.push(...compileNullableCheck(compiler, schema, value));
@@ -451,7 +451,7 @@ function compileNumberSchema(
     compiler: Compiler,
     schema: OpenAPINumberSchema | OpenAPIIntegerSchema,
 ) {
-    return compiler.defineValidationFunction(schema, ({ value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, error }) => {
         const enumCheck = compileEnumableCheck(compiler, schema, value, error);
         if (enumCheck) {
             return enumCheck;
@@ -480,7 +480,7 @@ function compileNumberSchema(
 }
 
 function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
-    return compiler.defineValidationFunction(schema, ({ value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, error }) => {
         const enumCheck = compileEnumableCheck(compiler, schema, value, error);
         if (enumCheck) {
             return enumCheck;
@@ -502,6 +502,71 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
             ),
         );
 
+        if (schema.minLength) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '<',
+                        builders.memberExpression(value, builders.identifier('length')),
+                        builders.literal(schema.minLength),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected at least ${schema.minLength} characters`),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
+        if (schema.maxLength) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '>',
+                        builders.memberExpression(value, builders.identifier('length')),
+                        builders.literal(schema.maxLength),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected at most ${schema.maxLength} characters`),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
+        if (schema.pattern) {
+            const patternStr = schema.pattern;
+            const patternRegexp = compiler.declareForInput(patternStr, (id) => {
+                return builders.variableDeclaration('const', [
+                    builders.variableDeclarator(
+                        id,
+                        builders.newExpression(builders.identifier('RegExp'), [
+                            builders.literal(patternStr),
+                        ]),
+                    ),
+                ]);
+            });
+
+            nodes.push(
+                builders.ifStatement(
+                    builders.unaryExpression(
+                        '!',
+                        builders.callExpression(
+                            builders.memberExpression(patternRegexp, builders.identifier('test')),
+                            [value],
+                        ),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected to match the pattern "${schema.pattern}"`),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
         nodes.push(builders.returnStatement(value));
 
         return nodes;
@@ -509,7 +574,7 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
 }
 
 function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) {
-    return compiler.defineValidationFunction(schema, ({ value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ value, error }) => {
         const enumCheck = compileEnumableCheck(compiler, schema, value, error);
         if (enumCheck) {
             return enumCheck;
@@ -538,7 +603,7 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
 }
 
 function compileAnySchema(compiler: Compiler, schema: object) {
-    return compiler.defineValidationFunction(schema, ({ value }) => {
+    return compiler.declareValidationFunction(schema, ({ value }) => {
         return [builders.returnStatement(value)];
     });
 }

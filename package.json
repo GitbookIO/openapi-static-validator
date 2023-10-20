@@ -1,7 +1,7 @@
 {
     "name": "openapi-to-validate",
     "version": "0.0.0",
-    "description": "Compile an OpenAPI file to a JS validation function for requests",
+    "description": "Statically compile an OpenAPI spec into a JS validation function",
     "main": "index.js",
     "type": "module",
     "scripts": {

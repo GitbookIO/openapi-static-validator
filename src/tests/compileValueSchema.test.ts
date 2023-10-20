@@ -42,6 +42,15 @@ describe('String', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('with pattern', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'string',
+            pattern: '^[a-z]+$',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 describe('Objects', () => {

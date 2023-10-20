@@ -12,42 +12,55 @@ import { compileValidateRequest } from './compileValidateRequest';
 export class Compiler {
     private input: OpenAPISpec;
 
-    /** Map of hash to an object in the `identifiers` map */
-    private hashes: Map<string, object> = new Map();
-
-    /** Map of objects from the spect to identifier name */
-    private identifiers: WeakMap<object, string> = new WeakMap();
+    /** Map of hash to the identifier */
+    private hashes: Map<string, string> = new Map();
+    /** Map of objects to the identifier */
+    private objectHashes: WeakMap<object, string> = new WeakMap();
 
     /** Counter to get a new identifier */
     private identifierCounter: number = 0;
 
-    private functions: Map<string, namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration> =
-        new Map([[ValidationErrorIdentifier.name, ValidationErrorClass]]);
+    /** Map of identifiers defined globally */
+    private globalDeclarations: (namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration)[] = [ValidationErrorClass];
+
+    /** Map of hashes already processed */
+    private processedHashes: Set<string> = new Set();
 
     constructor(input: OpenAPISpec = {}) {
         this.input = input;
     }
 
     /**
-     * Define a function generated from an object.
+     * Define a global identifier with a nickname.
      */
-    public defineFunction(
-        input: object,
-        gen: (id: string) => namedTypes.FunctionDeclaration,
+    public declareGlobally(declaration: namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration) {
+        this.globalDeclarations.push(declaration);
+    }
+
+    /**
+     * Declare something globally basded on an input and return an identifier.
+     */
+    public declareForInput(
+        input: any,
+        gen: (id: namedTypes.Identifier) => namedTypes.FunctionDeclaration  | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration,
     ): namedTypes.Identifier {
         const hash = this.hashObject(input);
-        if (!this.functions.has(hash)) {
-            const fn = gen(hash);
-            this.functions.set(hash, fn);
+        const identifier = builders.identifier(hash);
+
+        if (!this.processedHashes.has(hash)) {
+            const fn = gen(identifier);
+            this.declareGlobally(fn);
+
+            this.processedHashes.add(hash);
         }
 
-        return builders.identifier(hash);
+        return identifier;
     }
 
     /**
      * Define a function to validate an input.
      */
-    public defineValidationFunction(
+    public declareValidationFunction(
         input: object,
         gen: (args: {
             /** Identifier for the value argument being passed to the function */
@@ -68,9 +81,9 @@ export class Compiler {
             ]);
         };
 
-        return this.defineFunction(input, (id) => {
+        return this.declareForInput(input, (id) => {
             return builders.functionDeclaration(
-                builders.identifier(id),
+                id,
                 [pathIdentifier, valueIdentifier],
                 builders.blockStatement(
                     gen({
@@ -100,7 +113,7 @@ export class Compiler {
     public ast() {
         return builders.program([
             ...compileValidateRequest(this, this.input),
-            ...this.functions.values(),
+            ...this.globalDeclarations,
         ]);
     }
 
@@ -114,19 +127,25 @@ export class Compiler {
     /**
      * Hash an object and return an identifier name.
      */
-    public hashObject(input: object): string {
-        if (this.identifiers.has(input)) {
-            return this.identifiers.get(input)!;
+    public hashObject(input: any): string {
+        const isObject = typeof input === 'object' && input !== null;
+
+        // Fast track for objects
+        if (isObject && this.objectHashes.has(input)) {
+            return this.objectHashes.get(input)!;
         }
 
         const hashValue = hash(input);
         if (this.hashes.has(hashValue)) {
-            return this.identifiers.get(this.hashes.get(hashValue)!)!;
+            return this.hashes.get(hashValue)!;
         }
 
-        this.hashes.set(hashValue, input);
         const name = `obj${this.identifierCounter++}`;
-        this.identifiers.set(input, name);
+        this.hashes.set(hashValue, name);
+        if (isObject) {
+            this.objectHashes.set(input, name);
+        }
+
         return name;
     }
 

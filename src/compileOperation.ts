@@ -17,7 +17,7 @@ import { ValidationErrorIdentifier } from './error';
  * }
  */
 export function compileOperation(compiler: Compiler, operation: OpenAPIOperation) {
-    return compiler.defineValidationFunction(operation, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(operation, ({ value, path, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         if (operation.operationId) {

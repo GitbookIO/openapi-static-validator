@@ -18,6 +18,9 @@ const PRESERVE_PROPS = [
     'items',
     'minItems',
     'maxItems',
+    'minLength',
+    'maxLength',
+    'pattern',
     'format',
     'properties',
     'additionalProperties',
@@ -35,17 +38,26 @@ const PRESERVE_PROPS = [
 ];
 
 /**
+ * Normalize the input value as an object.
+ */
+function normalizeHashInput(input: any): object {
+    if (typeof input !== 'object' || input === null) {
+        // Remove all properties that are not important for the hash.
+        input = Object.keys(input).reduce((acc, key) => {
+            if (PRESERVE_PROPS.includes(key)) {
+                acc[key] = input[key];
+            }
+
+            return acc;
+        }, {} as any);
+    }
+
+    return { input };
+}
+
+/**
  * Hash an object only taking the important properties into account.
  */
-export function hash(input: object): string {
-    // Remove all properties that are not important for the hash.
-    const cleanInput = Object.keys(input).reduce((acc, key) => {
-        if (PRESERVE_PROPS.includes(key)) {
-            acc[key] = input[key];
-        }
-
-        return acc;
-    }, {} as any);
-
-    return hashObject(cleanInput);
+export function hash(input: any): string {
+    return hashObject(normalizeHashInput(input));
 }

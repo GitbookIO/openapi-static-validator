@@ -17,7 +17,7 @@ import { compileValueSchema } from './compileValueSchema';
  * }
  */
 export function compileParameter(compiler: Compiler, parameter: OpenAPIParameter) {
-    return compiler.defineValidationFunction(parameter, ({ value, path, error }) => {
+    return compiler.declareValidationFunction(parameter, ({ value, path, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         const paramValue = builders.memberExpression(

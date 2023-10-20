@@ -65,6 +65,9 @@ export interface OpenAPIOneOfSchema {
 export interface OpenAPIStringSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
     type: 'string';
     format?: 'date' | 'uri';
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
 }
 
 export interface OpenAPINumberSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
