@@ -16,12 +16,8 @@ openapi-static-validator spec.json > validate.js
 
 ## TODOs
 
--   Parameters:
-    -   [ ] in `cookie`
-    -   [ ] in `header`
-    -   [ ] in `query`
--   JSONSchema `integer`
-    -   [ ] no float
+-   [ ] `in: header` and `in: cookie` parameters
+-   [ ] validation of `type: integer`, not just as `number`
 
 ## Development
 

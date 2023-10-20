@@ -111,9 +111,93 @@ export function compileOperation(
 
         // Validate query parameters
         const queryParameters = (operation.parameters ?? []).filter(
-            (parameter) => compiler.resolveMaybeRef(parameter).in === 'path',
+            (parameter) => compiler.resolveMaybeRef(parameter).in === 'query',
         );
-        queryParameters.forEach((parameter) => {});
+        queryParameters.forEach((refParameter, index) => {
+            const parameter = compiler.resolveMaybeRef(refParameter);
+            const paramValueIdentifier = builders.identifier(`queryParam${index}`);
+            const resultIdentifier = builders.identifier(`queryParamResult${index}`);
+            const schemaFn = compileValueSchema(compiler, parameter.schema);
+
+            // Assign the query parameter to a variable
+            nodes.push(
+                builders.variableDeclaration('const', [
+                    builders.variableDeclarator(
+                        paramValueIdentifier,
+                        builders.memberExpression(
+                            builders.memberExpression(
+                                requestIdentifier,
+                                builders.identifier('query'),
+                            ),
+                            builders.literal(parameter.name),
+                            true,
+                        ),
+                    ),
+                ]),
+            );
+
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '===',
+                        paramValueIdentifier,
+                        builders.identifier('undefined'),
+                    ),
+                    builders.blockStatement(
+                        parameter.required
+                            ? [
+                                  builders.returnStatement(
+                                      buildRequestError(
+                                          400,
+                                          `query parameter ${parameter.name} is required`,
+                                      ),
+                                  ),
+                              ]
+                            : [],
+                    ),
+                    builders.blockStatement([
+                        // Validate the value
+                        builders.variableDeclaration('const', [
+                            builders.variableDeclarator(
+                                resultIdentifier,
+                                builders.callExpression(schemaFn, [
+                                    builders.arrayExpression([
+                                        builders.literal('query'),
+                                        builders.literal(parameter.name),
+                                    ]),
+                                    paramValueIdentifier,
+                                    contextIdentifier,
+                                ]),
+                            ),
+                        ]),
+                        // Fail if error
+                        builders.ifStatement(
+                            builders.binaryExpression(
+                                'instanceof',
+                                resultIdentifier,
+                                ValidationErrorIdentifier,
+                            ),
+                            builders.blockStatement([builders.returnStatement(resultIdentifier)]),
+                        ),
+                        // Otherwise assign the value
+                        builders.expressionStatement(
+                            builders.assignmentExpression(
+                                '=',
+                                builders.memberExpression(
+                                    builders.memberExpression(
+                                        requestIdentifier,
+                                        builders.identifier('query'),
+                                    ),
+                                    builders.literal(parameter.name),
+                                    true,
+                                ),
+                                resultIdentifier,
+                            ),
+                        ),
+                    ]),
+                ),
+            );
+        });
 
         // Validate the body against the schema
         if (operation.requestBody) {

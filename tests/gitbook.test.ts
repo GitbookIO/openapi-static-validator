@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { validateRequest } from './gitbook.validate';
+import { validateRequest, ValidationError } from './gitbook.validate';
 
 test('POST /spaces/1234/hive/token', () => {
     const result = validateRequest({
@@ -39,4 +39,19 @@ test('POST orgs/appleId/custom-fields', () => {
             organizationId: 'appleId',
         },
     });
+});
+
+test('GET orgs/microsoft/collections?limit=invalid', () => {
+    const result = validateRequest({
+        path: '/orgs/microsoft/collections',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            limit: 'invalid',
+        },
+    });
+    expect(result instanceof ValidationError).toBeTruthy();
+    expect(result.path).toEqual(['query', 'limit']);
 });
