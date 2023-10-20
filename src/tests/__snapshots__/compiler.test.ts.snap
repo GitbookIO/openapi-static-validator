@@ -29,7 +29,10 @@ export class ValidationError extends RequestError {
     }
 }
 function obj0(path, value, context) {
-    if (typeof value !== 'number') {
+    if (typeof value === 'string') {
+        value = Number.parseFloat(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
         return new ValidationError(path, 'expected a number');
     }
     return value;
@@ -102,7 +105,10 @@ export class ValidationError extends RequestError {
     }
 }
 function obj0(path, value, context) {
-    if (typeof value !== 'number') {
+    if (typeof value === 'string') {
+        value = Number.parseFloat(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
         return new ValidationError(path, 'expected a number');
     }
     return value;

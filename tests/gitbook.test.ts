@@ -55,6 +55,27 @@ test('GET orgs/microsoft/collections?limit=invalid', () => {
     expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);
 });
 
+test('GET orgs/microsoft/collections?limit=10', () => {
+    const result = validateRequest({
+        path: '/orgs/microsoft/collections',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            limit: '10',
+        },
+    });
+    expect(result).toMatchObject({
+        params: {
+            organizationId: 'microsoft',
+        },
+        query: {
+            limit: 10,
+        },
+    });
+});
+
 test('POST orgs/appleId/custom-fields', () => {
     const result = validateRequest({
         path: '/orgs/appleId/spaces',

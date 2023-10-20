@@ -616,12 +616,48 @@ function compileNumberSchema(
             return [...nodes, ...enumCheck];
         }
 
+        // Try to convert the value to a number
         nodes.push(
             builders.ifStatement(
                 builders.binaryExpression(
-                    '!==',
+                    '===',
                     builders.unaryExpression('typeof', value),
-                    builders.literal('number'),
+                    builders.literal('string'),
+                ),
+                builders.blockStatement([
+                    builders.expressionStatement(
+                        builders.assignmentExpression(
+                            '=',
+                            value,
+                            builders.callExpression(
+                                builders.memberExpression(
+                                    builders.identifier('Number'),
+                                    builders.identifier('parseFloat'),
+                                ),
+                                [value],
+                            ),
+                        ),
+                    ),
+                ]),
+            ),
+        );
+
+        nodes.push(
+            builders.ifStatement(
+                builders.logicalExpression(
+                    '||',
+                    builders.binaryExpression(
+                        '!==',
+                        builders.unaryExpression('typeof', value),
+                        builders.literal('number'),
+                    ),
+                    builders.callExpression(
+                        builders.memberExpression(
+                            builders.identifier('Number'),
+                            builders.identifier('isNaN'),
+                        ),
+                        [value],
+                    ),
                 ),
                 builders.blockStatement([builders.returnStatement(error('expected a number'))]),
             ),
