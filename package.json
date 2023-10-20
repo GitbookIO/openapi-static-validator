@@ -14,7 +14,8 @@
         "typecheck": "tsc --noEmit",
         "prepublish": "bun run build"
     },
-    "author": "",
+    "author": "Samy Pessé <samy@gitbook.com>",
+    "repository": "github:GitbookIO/openapi-static-validator",
     "license": "ISC",
     "dependencies": {
         "ast-types": "^0.14.2",
