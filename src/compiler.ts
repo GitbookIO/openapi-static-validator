@@ -1,6 +1,6 @@
 import escodegen from 'escodegen';
 import { namedTypes, builders } from 'ast-types';
-import { ValidationErrorClass, ValidationErrorIdentifier } from './error';
+import { RequestErrorClass, ValidationErrorClass, ValidationErrorIdentifier } from './error';
 import { OpenAPIRef, OpenAPISpec } from './types';
 import { compileValueSchema } from './compileValueSchema';
 import { hash } from './hash';
@@ -25,7 +25,11 @@ export class Compiler {
         | namedTypes.FunctionDeclaration
         | namedTypes.ClassDeclaration
         | namedTypes.VariableDeclaration
-    )[] = [ValidationErrorClass];
+        | namedTypes.ExportNamedDeclaration
+    )[] = [
+        builders.exportNamedDeclaration(RequestErrorClass),
+        builders.exportNamedDeclaration(ValidationErrorClass),
+    ];
 
     /** Map of hashes already processed */
     private processedHashes: Set<string> = new Set();
@@ -116,12 +120,12 @@ export class Compiler {
     /**
      * Build the AST from the entire spec.
      */
-    public build() {
+    public indexAllComponents() {
         // Index all the schema components.
-        // const schemas = this.input.components?.schemas ?? {};
-        // Object.values(schemas).forEach((schema) => {
-        //     compileValueSchema(this, schema);
-        // });
+        const schemas = this.input.components?.schemas ?? {};
+        Object.values(schemas).forEach((schema) => {
+            compileValueSchema(this, schema);
+        });
     }
 
     /**

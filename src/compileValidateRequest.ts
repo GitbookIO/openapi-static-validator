@@ -3,7 +3,7 @@ import { namedTypes, builders } from 'ast-types';
 import { Compiler } from './compiler';
 import { OpenAPISpec } from './types';
 import { compilePath } from './compilePath';
-import { buildValidationError } from './error';
+import { buildRequestError } from './error';
 import { OpenAPIParsedPath, openapiPathToRegex } from './paths';
 
 const COMMENT = `*
@@ -58,7 +58,7 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
     });
 
     // Otherwise, return an error
-    nodes.push(builders.returnStatement(buildValidationError('no operation match path')));
+    nodes.push(builders.returnStatement(buildRequestError(404, 'no operation match path')));
 
     return [
         {

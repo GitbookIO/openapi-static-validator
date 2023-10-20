@@ -8,13 +8,65 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
+}
+function obj0(path, value, context) {
+    if (typeof value !== 'number') {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj2(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'Expected a string');
+    }
+    return value;
+}
+function obj1(path, value, context) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
+    const keys = new Set(Object.keys(value));
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj2([
+            ...path,
+            'foo'
+        ], value0, context);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+        keys.delete('foo');
+    }
+    const value1 = value['bar'];
+    if (value1 !== undefined) {
+        const result1 = obj0([
+            ...path,
+            'bar'
+        ], value1, context);
+        if (result1 instanceof ValidationError) {
+            return result1;
+        }
+        value['bar'] = result1;
+        keys.delete('bar');
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
 }"
 `;
 
@@ -26,12 +78,76 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
+}
+function obj0(path, value, context) {
+    if (typeof value !== 'number') {
+        return new ValidationError(path, 'Expected a number');
+    }
+    return value;
+}
+function obj2(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'Expected a string');
+    }
+    return value;
+}
+function obj1(path, value, context) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
+    const keys = new Set(Object.keys(value));
+    const value0 = value['foo'];
+    if (value0 !== undefined) {
+        const result0 = obj2([
+            ...path,
+            'foo'
+        ], value0, context);
+        if (result0 instanceof ValidationError) {
+            return result0;
+        }
+        value['foo'] = result0;
+        keys.delete('foo');
+    }
+    const value1 = value['bar'];
+    if (value1 !== undefined) {
+        const result1 = obj0([
+            ...path,
+            'bar'
+        ], value1, context);
+        if (result1 instanceof ValidationError) {
+            return result1;
+        }
+        value['bar'] = result1;
+        keys.delete('bar');
+    }
+    const value2 = value['rec'];
+    if (value2 !== undefined) {
+        const result2 = obj1([
+            ...path,
+            'rec'
+        ], value2, context);
+        if (result2 instanceof ValidationError) {
+            return result2;
+        }
+        value['rec'] = result2;
+        keys.delete('rec');
+    }
+    if (keys.size > 0) {
+        return new ValidationError(path, 'Unexpected properties');
+    }
+    return value;
 }"
 `;

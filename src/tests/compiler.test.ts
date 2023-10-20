@@ -22,7 +22,7 @@ test('components ref', () => {
             },
         },
     });
-    compiler.build();
+    compiler.indexAllComponents();
     expect(compiler.compile()).toMatchSnapshot();
 });
 
@@ -50,6 +50,6 @@ test('recursive refs', () => {
             },
         },
     });
-    compiler.build();
+    compiler.indexAllComponents();
     expect(compiler.compile()).toMatchSnapshot();
 });

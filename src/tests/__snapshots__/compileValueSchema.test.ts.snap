@@ -8,11 +8,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -32,11 +38,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -56,11 +68,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -83,11 +101,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -107,11 +131,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -135,11 +165,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -201,11 +237,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -249,11 +291,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -274,11 +322,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -319,11 +373,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -380,11 +440,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -411,11 +477,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -457,11 +529,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -502,11 +580,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -543,11 +627,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }
@@ -588,11 +678,17 @@ Validate a request against the OpenAPI spec
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
-    return new ValidationError([], 'no operation match path');
+    return new RequestError(404, 'no operation match path');
 }
-class ValidationError extends Error {
-    constructor(path, message) {
+export class RequestError extends Error {
+    constructor(code, message) {
         super(message);
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    constructor(path, message) {
+        super(409, message);
         this.path = path;
     }
 }

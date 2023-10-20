@@ -3,7 +3,7 @@ import { namedTypes, builders } from 'ast-types';
 import { Compiler } from './compiler';
 import { OpenAPIPath } from './types';
 import { compileOperation } from './compileOperation';
-import { buildValidationError } from './error';
+import { buildRequestError } from './error';
 import { OpenAPIParsedPath } from './paths';
 
 /**
@@ -52,7 +52,7 @@ export function compilePath(
             );
         });
 
-        nodes.push(builders.returnStatement(buildValidationError('method not supported')));
+        nodes.push(builders.returnStatement(buildRequestError(405, 'method not supported')));
 
         return builders.functionDeclaration(
             functionId,

@@ -3,7 +3,7 @@ import { namedTypes, builders } from 'ast-types';
 import { Compiler } from './compiler';
 import { OpenAPIOperation } from './types';
 import { compileValueSchema } from './compileValueSchema';
-import { ValidationErrorIdentifier, buildValidationError } from './error';
+import { ValidationErrorIdentifier, buildRequestError } from './error';
 import { OpenAPIParsedPath, getPathParamIndex, openapiPathToRegex } from './paths';
 
 /**
@@ -127,7 +127,7 @@ export function compileOperation(
                             builders.identifier('undefined'),
                         ),
                         builders.blockStatement([
-                            builders.returnStatement(buildValidationError('body is required')),
+                            builders.returnStatement(buildRequestError(400, 'body is required')),
                         ]),
                     ),
                 );
@@ -185,7 +185,7 @@ export function compileOperation(
                         builders.identifier('undefined'),
                     ),
                     builders.blockStatement([
-                        builders.returnStatement(buildValidationError('body is not allowed')),
+                        builders.returnStatement(buildRequestError(400, 'body is not allowed')),
                     ]),
                 ),
             );
