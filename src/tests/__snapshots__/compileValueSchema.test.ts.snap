@@ -785,10 +785,13 @@ function obj0(path, value, context) {
     }
     const alt1 = obj2(path, value, context);
     if (!(alt1 instanceof ValidationError)) {
-        result = alt1;
         if (result !== undefined) {
             return new ValidationError(path, 'expected to only match one of the schemas');
         }
+        result = alt1;
+    }
+    if (result === undefined) {
+        return new ValidationError(path, 'expected to match one');
     }
     return result;
 }"

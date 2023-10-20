@@ -103,3 +103,39 @@ test('PUT orgs/apple/schemas/newType', () => {
         },
     });
 });
+
+test('POST orgs/apple/members/jony (invalid)', () => {
+    const result = validateRequest({
+        path: '/orgs/apple/members/jony',
+        method: 'patch',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+        body: {
+            role: 'invalid',
+        },
+    });
+    expect(result instanceof ValidationError ? result.path : null).toEqual(['body', 'role']);
+});
+
+test('POST orgs/apple/members/jony (null)', () => {
+    const result = validateRequest({
+        path: '/orgs/apple/members/jony',
+        method: 'patch',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+        body: {
+            role: null,
+        },
+    });
+    expect(result).toMatchObject({
+        operationId: 'updateMemberInOrganizationById',
+        params: {
+            organizationId: 'apple',
+            userId: 'jony',
+        },
+    });
+});

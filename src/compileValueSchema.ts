@@ -134,9 +134,6 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
                         ),
                     ),
                     builders.blockStatement([
-                        builders.expressionStatement(
-                            builders.assignmentExpression('=', resultIdentifier, altIdentifier),
-                        ),
                         ...(index > 0
                             ? [
                                   builders.ifStatement(
@@ -153,10 +150,24 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
                                   ),
                               ]
                             : []),
+                        builders.expressionStatement(
+                            builders.assignmentExpression('=', resultIdentifier, altIdentifier),
+                        ),
                     ]),
                 ),
             );
         });
+
+        nodes.push(
+            builders.ifStatement(
+                builders.binaryExpression(
+                    '===',
+                    resultIdentifier,
+                    builders.identifier('undefined'),
+                ),
+                builders.blockStatement([builders.returnStatement(error('expected to match one'))]),
+            ),
+        );
 
         nodes.push(builders.returnStatement(resultIdentifier));
 
@@ -597,13 +608,14 @@ function compileNumberSchema(
     schema: OpenAPINumberSchema | OpenAPIIntegerSchema,
 ) {
     return compiler.declareValidationFunction(schema, ({ value, error }) => {
-        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
-        if (enumCheck) {
-            return enumCheck;
-        }
-
         const nodes: namedTypes.BlockStatement['body'] = [];
         nodes.push(...compileNullableCheck(compiler, schema, value));
+
+        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
+        if (enumCheck) {
+            return [...nodes, ...enumCheck];
+        }
+
         nodes.push(
             builders.ifStatement(
                 builders.binaryExpression(
@@ -623,13 +635,14 @@ function compileNumberSchema(
 
 function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
     return compiler.declareValidationFunction(schema, ({ value, context, path, error }) => {
-        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
-        if (enumCheck) {
-            return enumCheck;
-        }
-
         const nodes: namedTypes.BlockStatement['body'] = [];
         nodes.push(...compileNullableCheck(compiler, schema, value));
+
+        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
+        if (enumCheck) {
+            return [...nodes, ...enumCheck];
+        }
+
         nodes.push(
             builders.ifStatement(
                 builders.binaryExpression(
@@ -752,13 +765,14 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
 
 function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) {
     return compiler.declareValidationFunction(schema, ({ value, error }) => {
-        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
-        if (enumCheck) {
-            return enumCheck;
-        }
-
         const nodes: namedTypes.BlockStatement['body'] = [];
         nodes.push(...compileNullableCheck(compiler, schema, value));
+
+        const enumCheck = compileEnumableCheck(compiler, schema, value, error);
+        if (enumCheck) {
+            return [...nodes, ...enumCheck];
+        }
+
         nodes.push(
             builders.ifStatement(
                 builders.binaryExpression(
