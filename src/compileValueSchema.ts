@@ -372,7 +372,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
         });
 
         // No additional properties are allowed
-        if (!schema.additionalProperties && schema.properties) {
+        if (schema.additionalProperties === false) {
             nodes.push(
                 builders.ifStatement(
                     builders.binaryExpression(
@@ -381,7 +381,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                         builders.literal(0),
                     ),
                     builders.blockStatement([
-                        builders.returnStatement(error(`unexpected properties`)),
+                        builders.returnStatement(error(`unexpected additional properties`)),
                     ]),
                 ),
             );

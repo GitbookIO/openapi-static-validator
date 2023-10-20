@@ -298,9 +298,6 @@ function obj0(path, value, context) {
         value['bar'] = result1;
         keys.delete('bar');
     }
-    if (keys.size > 0) {
-        return new ValidationError(path, 'unexpected properties');
-    }
     return value;
 }"
 `;
@@ -357,9 +354,6 @@ function obj0(path, value, context) {
         keys.delete('foo');
     } else {
         value['foo'] = 10;
-    }
-    if (keys.size > 0) {
-        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }"
@@ -851,9 +845,6 @@ function obj1(path, value, context) {
         value['a'] = result0;
         keys.delete('a');
     }
-    if (keys.size > 0) {
-        return new ValidationError(path, 'unexpected properties');
-    }
     return value;
 }
 function obj4(path, value, context) {
@@ -878,9 +869,6 @@ function obj3(path, value, context) {
         }
         value['b'] = result0;
         keys.delete('b');
-    }
-    if (keys.size > 0) {
-        return new ValidationError(path, 'unexpected properties');
     }
     return value;
 }

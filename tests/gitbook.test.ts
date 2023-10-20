@@ -65,10 +65,41 @@ test('POST orgs/appleId/custom-fields', () => {
         query: {},
         body: undefined,
     });
-    console.log(result);
     expect(result).toMatchObject({
         params: {
             organizationId: 'appleId',
+        },
+    });
+});
+
+test('PUT orgs/apple/schemas/newType', () => {
+    const result = validateRequest({
+        path: '/orgs/apple/schemas/newType',
+        method: 'put',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+        body: {
+            type: 'newType',
+            title: {
+                singular: 'New type',
+                plural: 'New types',
+            },
+            properties: [
+                {
+                    name: 'title',
+                    type: 'text',
+                    title: 'Title',
+                },
+            ],
+        },
+    });
+    expect(result).toMatchObject({
+        operationId: 'setEntitySchema',
+        params: {
+            organizationId: 'apple',
+            entityType: 'newType',
         },
     });
 });
