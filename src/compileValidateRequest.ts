@@ -5,8 +5,9 @@ import { OpenAPISpec } from './types';
 import { compilePath } from './compilePath';
 import { buildRequestError } from './error';
 import { OpenAPIParsedPath, openapiPathToRegex } from './paths';
+import { annotateWithJSDocComment } from './comments';
 
-const COMMENT = `*
+const COMMENT = `
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
@@ -61,17 +62,16 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
     nodes.push(builders.returnStatement(buildRequestError(404, 'no operation match path')));
 
     return [
-        {
-            ...builders.exportNamedDeclaration(
+        annotateWithJSDocComment(
+            builders.exportNamedDeclaration(
                 builders.functionDeclaration.from({
                     id: builders.identifier('validateRequest'),
                     params: [request, context],
                     body: builders.blockStatement(nodes),
                 }),
             ),
-            // @ts-ignore
-            leadingComments: [builders.block(COMMENT, true)],
-        },
+            COMMENT,
+        ),
     ];
 }
 

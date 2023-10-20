@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components ref 1`] = `
-"/**
+"/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
@@ -11,14 +11,20 @@ export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
 export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
     constructor(code, message) {
         super(message);
+        /** @type {number} HTTP code for the error*/
         this.code = code;
     }
 }
 export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
     constructor(path, message) {
         super(409, message);
+        /** @type {string[]} The path that failed validation*/
         this.path = path;
     }
 }
@@ -71,7 +77,7 @@ function obj1(path, value, context) {
 `;
 
 exports[`recursive refs 1`] = `
-"/**
+"/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
@@ -81,14 +87,20 @@ export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
 export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
     constructor(code, message) {
         super(message);
+        /** @type {number} HTTP code for the error*/
         this.code = code;
     }
 }
 export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
     constructor(path, message) {
         super(409, message);
+        /** @type {string[]} The path that failed validation*/
         this.path = path;
     }
 }
