@@ -146,6 +146,38 @@ test('PUT orgs/apple/schemas/newType', () => {
     });
 });
 
+test('PUT orgs/apple/schemas/newType/entities', () => {
+    const result = validateRequest({
+        path: '/orgs/apple/schemas/newType/entities',
+        method: 'put',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+        body: {
+            entities: [
+                {
+                    entityId: 'something',
+                    properties: {
+                        title: 'Updated lambda',
+                        description: 'the description',
+                        url: 'https://example.com',
+                        public_traffic: false,
+                        created_on: '2020-01-01T00:00:00.000Z',
+                    },
+                },
+            ],
+        },
+    });
+    expect(result).toMatchObject({
+        operationId: 'upsertSchemaEntities',
+        params: {
+            organizationId: 'apple',
+            entityType: 'newType',
+        },
+    });
+});
+
 test('POST orgs/apple/members/jony (invalid)', () => {
     const result = validateRequest({
         path: '/orgs/apple/members/jony',

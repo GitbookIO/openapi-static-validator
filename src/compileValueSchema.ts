@@ -629,13 +629,7 @@ function compileNumberSchema(
                         builders.assignmentExpression(
                             '=',
                             value,
-                            builders.callExpression(
-                                builders.memberExpression(
-                                    builders.identifier('Number'),
-                                    builders.identifier('parseFloat'),
-                                ),
-                                [value],
-                            ),
+                            builders.callExpression(builders.identifier('Number'), [value]),
                         ),
                     ),
                 ]),
