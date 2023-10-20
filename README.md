@@ -16,17 +16,12 @@ openapi-static-validator spec.json > validate.js
 
 ## TODOs
 
--   Path/Operations
-    -   [ ] Validate parameters
+-   Parameters:
+    -   [ ] in `cookie`
+    -   [ ] in `header`
+    -   [ ] in `query`
 -   JSONSchema `string` validation of:
-    -   [x] `minLength`
-    -   [x] `maxLength`
     -   [ ] `format`
-    -   [x] `pattern`
--   JSONSchema `array` validation of:
-    -   [x] `minItems`
-    -   [x] `maxItems`
-    -   [x] `uniqueItems`
 -   JSONSchema `integer`
     -   [ ] no float
 

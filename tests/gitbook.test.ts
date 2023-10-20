@@ -10,5 +10,33 @@ test('POST /spaces/1234/hive/token', () => {
         },
         query: {},
     });
-    expect(result).toMatchSnapshot();
+    expect(result).toMatchObject({
+        headers: {
+            'content-type': 'application/json',
+        },
+        method: 'post',
+        operationId: 'generateSpaceHiveReadAccessToken',
+        params: {
+            spaceId: '1234',
+        },
+        path: '/spaces/1234/hive/token',
+        query: {},
+    });
+});
+
+test('POST orgs/appleId/custom-fields', () => {
+    const result = validateRequest({
+        path: '/orgs/appleId/custom-fields',
+        method: 'post',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+        body: { name: 'jira_board', type: 'number' },
+    });
+    expect(result).toMatchObject({
+        params: {
+            organizationId: 'appleId',
+        },
+    });
 });

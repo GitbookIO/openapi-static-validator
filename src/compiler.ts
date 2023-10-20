@@ -189,4 +189,15 @@ export class Compiler {
 
         return value;
     }
+
+    /**
+     * Resolve a potential ref to a value.
+     */
+    public resolveMaybeRef<T>(value: T | OpenAPIRef): T {
+        if (typeof value === 'object' && value !== null && '$ref' in value) {
+            return this.resolveRef(value);
+        }
+
+        return value;
+    }
 }

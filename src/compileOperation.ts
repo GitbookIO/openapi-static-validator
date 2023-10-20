@@ -47,7 +47,7 @@ export function compileOperation(
 
         // Extract and validate path params
         const pathParameters = (operation.parameters ?? []).filter(
-            (parameter) => parameter.in === 'path',
+            (parameter) => compiler.resolveMaybeRef(parameter).in === 'path',
         );
         nodes.push(
             builders.expressionStatement(
@@ -56,7 +56,9 @@ export function compileOperation(
                     builders.memberExpression(requestIdentifier, builders.identifier('params')),
                     builders.objectExpression(
                         pathParameters
-                            .map((parameter, index) => {
+                            .map((refParameter, index) => {
+                                const parameter = compiler.resolveMaybeRef(refParameter);
+
                                 const identifier = builders.identifier(`pathParam${index}`);
                                 const schemaFn = compileValueSchema(compiler, parameter.schema);
                                 const regexMatchIndex = getPathParamIndex(path, parameter.name);
@@ -109,7 +111,7 @@ export function compileOperation(
 
         // Validate query parameters
         const queryParameters = (operation.parameters ?? []).filter(
-            (parameter) => parameter.in === 'path',
+            (parameter) => compiler.resolveMaybeRef(parameter).in === 'path',
         );
         queryParameters.forEach((parameter) => {});
 

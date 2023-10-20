@@ -18,7 +18,7 @@ export interface OpenAPIPath {
 
 export interface OpenAPIOperation {
     operationId?: string;
-    parameters?: OpenAPIParameter[];
+    parameters?: Array<OpenAPIParameter | OpenAPIRef>;
     requestBody?: OpenAPIRequestBody;
 }
 
