@@ -48,10 +48,9 @@ export class Compiler {
         const identifier = builders.identifier(hash);
 
         if (!this.processedHashes.has(hash)) {
+            this.processedHashes.add(hash);
             const fn = gen(identifier);
             this.declareGlobally(fn);
-
-            this.processedHashes.add(hash);
         }
 
         return identifier;
@@ -136,6 +135,7 @@ export class Compiler {
         }
 
         const hashValue = hash(input);
+
         if (this.hashes.has(hashValue)) {
             return this.hashes.get(hashValue)!;
         }

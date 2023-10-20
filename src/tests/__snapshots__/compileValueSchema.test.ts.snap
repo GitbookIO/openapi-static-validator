@@ -1,14 +1,17 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Number basic 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj0(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
@@ -16,14 +19,17 @@ function obj0(path, value) {
 `;
 
 exports[`Integer basic 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj0(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
@@ -31,7 +37,10 @@ function obj0(path, value) {
 `;
 
 exports[`Nullable nullable: true 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -41,7 +50,7 @@ function obj0(path, value) {
     if (value === null) {
         return value;
     }
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
@@ -49,7 +58,10 @@ function obj0(path, value) {
 `;
 
 exports[`String with enum 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -63,26 +75,54 @@ function obj0(path, value) {
 }"
 `;
 
+exports[`String with pattern 1`] = `
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+const obj1 = new RegExp('^[a-z]+$');
+function obj0(path, value) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'Expected a string');
+    }
+    if (!obj1.test(value)) {
+        return new ValidationError(path, 'Expected to match the pattern "^[a-z]+$"');
+    }
+    return value;
+}"
+`;
+
 exports[`Objects with a required prop 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj1(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'string')) {
+    if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
 function obj0(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
@@ -94,6 +134,7 @@ function obj0(path, value) {
             return result0;
         }
         value['foo'] = result0;
+        keys.delete('foo');
     } else {
         return new ValidationError(path, 'Expected "foo" to be defined');
     }
@@ -107,6 +148,7 @@ function obj0(path, value) {
             return result1;
         }
         value['bar'] = result1;
+        keys.delete('bar');
     }
     if (keys.size > 0) {
         return new ValidationError(path, 'Unexpected properties');
@@ -116,19 +158,25 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with a default value 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj1(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj0(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
@@ -140,6 +188,7 @@ function obj0(path, value) {
             return result0;
         }
         value['foo'] = result0;
+        keys.delete('foo');
     } else {
         value['foo'] = 10;
     }
@@ -151,32 +200,44 @@ function obj0(path, value) {
 `;
 
 exports[`Objects as free form object 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj0(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     return value;
 }"
 `;
 
 exports[`Objects with additionalProperties: true 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj1(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj0(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
@@ -197,25 +258,31 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with additionalProperties: {} 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj1(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'string')) {
+    if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
 function obj0(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
@@ -246,13 +313,19 @@ function obj0(path, value) {
 `;
 
 exports[`Objects with minProperties/maxProperties 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj0(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     if (keys.size < 1) {
         return new ValidationError(path, 'Expected at least 1 properties');
@@ -264,21 +337,103 @@ function obj0(path, value) {
 }"
 `;
 
-exports[`anyOf 1`] = `
-"class ValidationError {
+exports[`Array minItems / maxItems 1`] = `
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj1(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'Expected a string');
+    }
+    return value;
+}
+function obj0(path, value) {
+    if (!Array.isArray(value)) {
+        return new ValidationError(path, 'Expected an array');
+    }
+    if (value.length < 1) {
+        return new ValidationError(path, 'Expected at least 1 items');
+    }
+    if (value.length > 10) {
+        return new ValidationError(path, 'Expected at most 10 items');
+    }
+    for (let i = 0; i < value.length; i++) {
+        const itemResult = obj1([
+            ...path,
+            i
+        ], value[i]);
+        if (itemResult instanceof ValidationError) {
+            return itemResult;
+        }
+        value[i] = itemResult;
+    }
+    return value;
+}"
+`;
+
+exports[`Array uniqueItems 1`] = `
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'Expected a string');
+    }
+    return value;
+}
+function obj0(path, value) {
+    if (!Array.isArray(value)) {
+        return new ValidationError(path, 'Expected an array');
+    }
+    const valueSet = new Set();
+    for (let i = 0; i < value.length; i++) {
+        const itemResult = obj1([
+            ...path,
+            i
+        ], value[i]);
+        if (valueSet.has(itemResult)) {
+            return new ValidationError(path, 'Expected unique items');
+        }
+        valueSet.add(itemResult);
+        if (itemResult instanceof ValidationError) {
+            return itemResult;
+        }
+        value[i] = itemResult;
+    }
+    return value;
+}"
+`;
+
+exports[`anyOf 1`] = `
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
+    constructor(path, message) {
+        super(message);
+        this.path = path;
+    }
+}
+function obj1(path, value) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'string')) {
+    if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
@@ -297,20 +452,23 @@ function obj0(path, value) {
 `;
 
 exports[`oneOf 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj1(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj2(path, value) {
-    if (!(typeof value === 'string')) {
+    if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
@@ -333,19 +491,25 @@ function obj0(path, value) {
 `;
 
 exports[`allOf 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj2(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj1(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['a'];
     if (value0 !== undefined) {
@@ -357,6 +521,7 @@ function obj1(path, value) {
             return result0;
         }
         value['a'] = result0;
+        keys.delete('a');
     }
     if (keys.size > 0) {
         return new ValidationError(path, 'Unexpected properties');
@@ -364,12 +529,15 @@ function obj1(path, value) {
     return value;
 }
 function obj4(path, value) {
-    if (!(typeof value === 'string')) {
+    if (typeof value !== 'string') {
         return new ValidationError(path, 'Expected a string');
     }
     return value;
 }
 function obj3(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['b'];
     if (value0 !== undefined) {
@@ -381,6 +549,7 @@ function obj3(path, value) {
             return result0;
         }
         value['b'] = result0;
+        keys.delete('b');
     }
     if (keys.size > 0) {
         return new ValidationError(path, 'Unexpected properties');

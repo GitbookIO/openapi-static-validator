@@ -12,8 +12,8 @@ CLI to compile an OpenAPI specification as JavaScript validation file, optimized
   - [ ] `format`
   - [x] `pattern`
 - JSONSchema `array` validation of:
-  - [ ] `minItems`
-  - [ ] `maxItems`
-  - [ ] `uniqueItems`
+  - [x] `minItems`
+  - [x] `maxItems`
+  - [x] `uniqueItems`
 - JSONSchema `integer`
   - [ ] no float

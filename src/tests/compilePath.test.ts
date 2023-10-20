@@ -33,6 +33,5 @@ test('with get and post', () => {
             },
         },
     });
-    console.log(compiler.compile());
     expect(compiler.compile()).toMatchSnapshot();
 });

@@ -136,6 +136,33 @@ describe('Objects', () => {
     });
 });
 
+describe('Array', () => {
+    test('minItems / maxItems', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'array',
+            items: {
+                type: 'string',
+            },
+            minItems: 1,
+            maxItems: 10,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('uniqueItems', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'array',
+            items: {
+                type: 'string',
+            },
+            uniqueItems: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+});
+
 test('anyOf', () => {
     const compiler = new Compiler();
     compileValueSchema(compiler, {

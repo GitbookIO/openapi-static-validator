@@ -1,7 +1,10 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`With body without 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
@@ -16,19 +19,25 @@ function obj0(path, value) {
 `;
 
 exports[`With body required 1`] = `
-"class ValidationError {
+"export function validateRequest(request) {
+    return new ValidationError([], 'no operation match path');
+}
+class ValidationError extends Error {
     constructor(path, message) {
         super(message);
         this.path = path;
     }
 }
 function obj2(path, value) {
-    if (!(typeof value === 'number')) {
+    if (typeof value !== 'number') {
         return new ValidationError(path, 'Expected a number');
     }
     return value;
 }
 function obj1(path, value) {
+    if (typeof value !== 'object' || value === null) {
+        return new ValidationError(path, 'Expected an object');
+    }
     const keys = new Set(Object.keys(value));
     const value0 = value['foo'];
     if (value0 !== undefined) {
@@ -40,6 +49,7 @@ function obj1(path, value) {
             return result0;
         }
         value['foo'] = result0;
+        keys.delete('foo');
     }
     if (keys.size > 0) {
         return new ValidationError(path, 'Unexpected properties');

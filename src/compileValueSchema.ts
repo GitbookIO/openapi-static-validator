@@ -451,10 +451,148 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
 }
 
 function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
-    return compiler.declareValidationFunction(schema, ({ value, error }) => {
+    return compiler.declareValidationFunction(schema, ({ path, value, error }) => {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         nodes.push(...compileNullableCheck(compiler, schema, value));
+
+        nodes.push(
+            builders.ifStatement(
+                builders.unaryExpression('!',
+                    builders.callExpression(
+                        builders.memberExpression(
+                            builders.identifier('Array'),
+                            builders.identifier('isArray'),
+                        ),
+                        [value],
+                    )
+                ),
+                builders.blockStatement([builders.returnStatement(error('Expected an array'))]),
+            ),
+        );
+
+        if (schema.minItems) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '<',
+                        builders.memberExpression(value, builders.identifier('length')),
+                        builders.literal(schema.minItems),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected at least ${schema.minItems} items`),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
+        if (schema.maxItems) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '>',
+                        builders.memberExpression(value, builders.identifier('length')),
+                        builders.literal(schema.maxItems),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(
+                            error(`Expected at most ${schema.maxItems} items`),
+                        ),
+                    ]),
+                ),
+            );
+        }
+
+        const valueSet = builders.identifier('valueSet');
+
+        if (schema.uniqueItems) {
+            nodes.push(
+                builders.variableDeclaration('const', [
+                    builders.variableDeclarator(
+                        valueSet,
+                        builders.newExpression(builders.identifier('Set'), []),
+                    ),
+                ]),
+            )
+        }
+
+        const index = builders.identifier('i');
+        const itemResult = builders.identifier('itemResult');
+        const fnSchema = compileValueSchema(compiler, schema.items);
+
+        nodes.push(
+            builders.forStatement(
+                builders.variableDeclaration('let', [
+                    builders.variableDeclarator(index, builders.literal(0)),
+                ]),
+                builders.binaryExpression(
+                    '<',
+                    index,
+                    builders.memberExpression(value, builders.identifier('length')),
+                ),
+                builders.updateExpression('++', index, false),
+                builders.blockStatement([
+                    builders.variableDeclaration('const', [
+                        builders.variableDeclarator(
+                            itemResult,
+                            builders.callExpression(
+                                fnSchema,
+                                [
+                                    builders.arrayExpression([
+                                        builders.spreadElement(path),
+                                        index,
+                                    ]),
+                                    builders.memberExpression(value, index, true),
+                                ],
+                            ),
+                        ),
+                    ]),
+                    ...(schema.uniqueItems ? [
+                        builders.ifStatement(
+                            builders.callExpression(
+                                builders.memberExpression(
+                                    valueSet,
+                                    builders.identifier('has'),
+                                ),
+                                [itemResult],
+                            ),
+                            builders.blockStatement([
+                                builders.returnStatement(
+                                    error(`Expected unique items`),
+                                ),
+                            ])
+                        ),
+                        builders.expressionStatement(
+                            builders.callExpression(
+                                builders.memberExpression(
+                                    valueSet,
+                                    builders.identifier('add'),
+                                ),
+                                [itemResult],
+                            )
+                        )
+                    ] : []),
+                    builders.ifStatement(
+                        builders.binaryExpression(
+                            'instanceof',
+                            itemResult,
+                            ValidationErrorIdentifier,
+                        ),
+                        builders.blockStatement([builders.returnStatement(itemResult)]),
+                    ),
+                    builders.expressionStatement(
+                        builders.assignmentExpression(
+                            '=',
+                            builders.memberExpression(value, index, true),
+                            itemResult,
+                        ),
+                    )
+                ])
+            )
+        )
+
 
         nodes.push(builders.returnStatement(value));
 

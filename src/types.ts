@@ -99,6 +99,7 @@ export interface OpenAPIArraySchema extends OpenAPINullableSchema {
     items: OpenAPIValueSchema;
     minItems?: number;
     maxItems?: number;
+    uniqueItems?: boolean;
 }
 
 export interface OpenAPINullableSchema {
