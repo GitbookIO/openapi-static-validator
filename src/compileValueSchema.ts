@@ -809,6 +809,28 @@ function compileBooleanSchema(compiler: Compiler, schema: OpenAPIBooleanSchema) 
             return [...nodes, ...enumCheck];
         }
 
+        // Try to convert the value to a boolean
+        nodes.push(
+            builders.ifStatement(
+                builders.binaryExpression('===', value, builders.literal('true')),
+                builders.blockStatement([
+                    builders.expressionStatement(
+                        builders.assignmentExpression('=', value, builders.literal(true)),
+                    ),
+                ]),
+            ),
+        );
+        nodes.push(
+            builders.ifStatement(
+                builders.binaryExpression('===', value, builders.literal('false')),
+                builders.blockStatement([
+                    builders.expressionStatement(
+                        builders.assignmentExpression('=', value, builders.literal(false)),
+                    ),
+                ]),
+            ),
+        );
+
         nodes.push(
             builders.ifStatement(
                 builders.binaryExpression(

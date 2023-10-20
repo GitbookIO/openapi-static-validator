@@ -76,6 +76,27 @@ test('GET orgs/microsoft/collections?limit=10', () => {
     });
 });
 
+test('GET orgs/microsoft/collections?nested=true', () => {
+    const result = validateRequest({
+        path: '/orgs/microsoft/collections',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            nested: 'true',
+        },
+    });
+    expect(result).toMatchObject({
+        params: {
+            organizationId: 'microsoft',
+        },
+        query: {
+            nested: true,
+        },
+    });
+});
+
 test('POST orgs/appleId/custom-fields', () => {
     const result = validateRequest({
         path: '/orgs/appleId/spaces',
