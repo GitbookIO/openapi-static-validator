@@ -1,10 +1,10 @@
 import { namedTypes, builders } from 'ast-types';
-import { pathToRegexp, Key } from 'path-to-regexp';
 
 import { Compiler } from './compiler';
 import { OpenAPISpec } from './types';
 import { compilePath } from './compilePath';
 import { buildValidationError } from './error';
+import { OpenAPIParsedPath, openapiPathToRegex } from './paths';
 
 /**
  * Compile a request validation function.
@@ -28,14 +28,14 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
     const nodes: namedTypes.FunctionDeclaration['body']['body'] = [];
 
     Object.entries(spec.paths ?? {}).map(([path, pathOperations], index) => {
-        const operationFn = compilePath(compiler, pathOperations);
+        const parsedPath = openapiPathToRegex(path);
+        const operationFn = compilePath(compiler, parsedPath, pathOperations);
 
         // Declare the regexp globally to avoid recompiling it at each execution
-        const regexpIdentifier = compilePathRegexp(compiler, path)
-
-        const matchIdentifier = builders.identifier(`match${index}`);
+        const regexpIdentifier = compilePathRegexp(compiler, path, parsedPath)
 
         // In the function, evaluate the regexp against the path
+        const matchIdentifier = builders.identifier(`match${index}`);
         nodes.push(
             builders.variableDeclaration('const', [
                 builders.variableDeclarator(
@@ -91,9 +91,9 @@ export function compileValidateRequest(compiler: Compiler, spec: OpenAPISpec) {
 /**
  * Compile a path to a regex identifier.
  */
-function compilePathRegexp(compiler: Compiler, path: string) {
+function compilePathRegexp(compiler: Compiler, path: string, parsed: OpenAPIParsedPath) {
     return compiler.declareForInput(path, (id) => {
-        const { regex } = openapiPathToRegex(path);
+        const { regex } = parsed;
 
         return builders.variableDeclaration('const', [
             builders.variableDeclarator(
@@ -105,22 +105,4 @@ function compilePathRegexp(compiler: Compiler, path: string) {
             ),
         ])
     });
-}
-
-/**
- * Compile an OpenAPI path to a regex.
- */
-export function openapiPathToRegex(path: string): {
-    regex: RegExp;
-    keys: Key[];
-} {
-    // Normalize the path to convert {param} as :param
-    const rxPathParam = /{([^}]+)}/;
-    while (rxPathParam.test(path)) {
-        path = path.replace(rxPathParam, ':$1');
-    }
-
-    const keys: Key[] = [];
-    const regex = pathToRegexp(path, keys);
-    return { regex, keys };
 }

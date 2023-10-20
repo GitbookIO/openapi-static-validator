@@ -4,6 +4,7 @@ import { Compiler } from './compiler';
 import { OpenAPIPath } from './types';
 import { compileOperation } from './compileOperation';
 import { buildValidationError } from './error';
+import { OpenAPIParsedPath } from './paths';
 
 /**
  * Compile a path into a function.
@@ -16,7 +17,11 @@ import { buildValidationError } from './error';
  *   headers: any;
  * }
  */
-export function compilePath(compiler: Compiler, pathOperations: OpenAPIPath) {
+export function compilePath(
+    compiler: Compiler,
+    path: OpenAPIParsedPath,
+    pathOperations: OpenAPIPath
+) {
     return compiler.declareForInput(pathOperations, (functionId) => {
         const requestIdentifier = builders.identifier('request');
         const pathMatchIdentifier = builders.identifier('pathMatch');
@@ -25,7 +30,7 @@ export function compilePath(compiler: Compiler, pathOperations: OpenAPIPath) {
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         Object.entries(pathOperations).forEach(([method, operation]) => {
-            const fnOperation = compileOperation(compiler, operation);
+            const fnOperation = compileOperation(compiler,path,  operation);
 
             nodes.push(
                 builders.ifStatement(

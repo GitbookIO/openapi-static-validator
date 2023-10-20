@@ -4,6 +4,7 @@ import { Compiler } from './compiler';
 import { OpenAPIOperation } from './types';
 import { compileValueSchema } from './compileValueSchema';
 import { ValidationErrorIdentifier, buildValidationError } from './error';
+import { OpenAPIParsedPath, getPathParamIndex, openapiPathToRegex } from './paths';
 
 /**
  * Compile an operation into a function.
@@ -16,7 +17,11 @@ import { ValidationErrorIdentifier, buildValidationError } from './error';
  *   headers: any;
  * }
  */
-export function compileOperation(compiler: Compiler, operation: OpenAPIOperation) {
+export function compileOperation(
+    compiler: Compiler,
+    path: OpenAPIParsedPath,
+    operation: OpenAPIOperation
+) {
     return compiler.declareForInput(operation, (functionId) => {
         const requestIdentifier = builders.identifier('request');
         const pathMatchIdentifier = builders.identifier('pathMatch');
@@ -24,6 +29,7 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
 
         const nodes: namedTypes.BlockStatement['body'] = [];
 
+        // Set the operationId on the request
         if (operation.operationId) {
             nodes.push(
                 builders.expressionStatement(
@@ -36,6 +42,74 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
             );
         }
 
+        // Extract and validate path params
+        const pathParameters = (operation.parameters ?? []).filter((parameter) => parameter.in === 'path');
+        nodes.push(
+            builders.expressionStatement(
+                builders.assignmentExpression(
+                    '=',
+                    builders.memberExpression(requestIdentifier, builders.identifier('params')),
+                    builders.objectExpression(
+                        pathParameters.map((parameter, index) => {
+                            const identifier = builders.identifier(`pathParam${index}`);
+                            const schemaFn = compileValueSchema(compiler, parameter.schema);
+                            const regexMatchIndex = getPathParamIndex(path, parameter.name);
+                
+                            nodes.push(
+                                builders.variableDeclaration(
+                                    'const',
+                                    [
+                                        builders.variableDeclarator(
+                                            identifier,
+                                            builders.callExpression(schemaFn, [
+                                                builders.arrayExpression([
+                                                    builders.literal('path'),
+                                                    builders.literal(parameter.name),
+                                                ]),
+                                                builders.memberExpression(
+                                                    pathMatchIdentifier,
+                                                    builders.literal(regexMatchIndex),
+                                                    true,
+                                                ),
+                                                contextIdentifier,
+                                            ]),
+                                        ),
+                                    ],
+                                )
+                            );
+                
+                            // Return an error if the parameter is invalid
+                            nodes.push(
+                                builders.ifStatement(
+                                    builders.binaryExpression(
+                                        'instanceof',
+                                        identifier,
+                                        ValidationErrorIdentifier,
+                                    ),
+                                    builders.blockStatement([
+                                        builders.returnStatement(identifier),
+                                    ]),
+                                ),
+                            );
+
+                            return builders.property(
+                                'init',
+                                builders.identifier(parameter.name),
+                                identifier,
+                            );
+                        }).flat()
+                    ),
+                ),
+            ),
+        );
+
+        // Validate query parameters
+        const queryParameters = (operation.parameters ?? []).filter((parameter) => parameter.in === 'path');
+        queryParameters.forEach((parameter) => {
+
+        });
+
+        // Validate the body against the schema
         if (operation.requestBody) {
             if (operation.requestBody.required) {
                 nodes.push(
