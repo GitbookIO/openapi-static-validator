@@ -18,7 +18,7 @@ export class Compiler {
     private objectHashes: WeakMap<object, string> = new WeakMap();
 
     /** Counter to get a new identifier */
-    private identifierCounter: number = 0;
+    private declarationCounter: number = 0;
 
     /** Map of identifiers defined globally */
     private globalDeclarations: (namedTypes.FunctionDeclaration | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration)[] = [ValidationErrorClass];
@@ -44,7 +44,7 @@ export class Compiler {
         input: any,
         gen: (id: namedTypes.Identifier) => namedTypes.FunctionDeclaration  | namedTypes.ClassDeclaration | namedTypes.VariableDeclaration,
     ): namedTypes.Identifier {
-        const hash = this.hashObject(input);
+        const hash = this.hashInput(input);
         const identifier = builders.identifier(hash);
 
         if (!this.processedHashes.has(hash)) {
@@ -130,7 +130,7 @@ export class Compiler {
     /**
      * Hash an object and return an identifier name.
      */
-    public hashObject(input: any): string {
+    public hashInput(input: any): string {
         const isObject = typeof input === 'object' && input !== null;
 
         // Fast track for objects
@@ -139,12 +139,11 @@ export class Compiler {
         }
 
         const hashValue = hash(input);
-
         if (this.hashes.has(hashValue)) {
             return this.hashes.get(hashValue)!;
         }
 
-        const name = `obj${this.identifierCounter++}`;
+        const name = `obj${this.declarationCounter++}`;
         this.hashes.set(hashValue, name);
         if (isObject) {
             this.objectHashes.set(input, name);

@@ -31,3 +31,14 @@ export const ValidationErrorClass = builders.classDeclaration.from({
         ),
     ]),
 });
+
+/**
+ * Build an empty error.
+ */
+export function buildValidationError(message: string) {
+    return builders.newExpression(ValidationErrorIdentifier, [
+        builders.arrayExpression([]),
+        builders.literal(message),
+    ]);
+}
+

@@ -224,7 +224,7 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                 builders.binaryExpression(
                     '===',
                     value,
-                    builders.identifier('null'),
+                    builders.literal(null),
                 )),
                 builders.blockStatement([builders.returnStatement(error('Expected an object'))]),
             ),
@@ -766,7 +766,7 @@ function compileNullableCheck(
 
     return [
         builders.ifStatement(
-            builders.binaryExpression('===', value, builders.identifier('null')),
+            builders.binaryExpression('===', value, builders.literal(null)),
             builders.blockStatement([builders.returnStatement(value)]),
         ),
     ];

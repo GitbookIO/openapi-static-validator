@@ -3,6 +3,7 @@ import { namedTypes, builders } from 'ast-types';
 import { Compiler } from './compiler';
 import { OpenAPIPath } from './types';
 import { compileOperation } from './compileOperation';
+import { buildValidationError } from './error';
 
 /**
  * Compile a path into a function.
@@ -16,7 +17,11 @@ import { compileOperation } from './compileOperation';
  * }
  */
 export function compilePath(compiler: Compiler, pathOperations: OpenAPIPath) {
-    return compiler.declareValidationFunction(pathOperations, ({ value, path, context, error }) => {
+    return compiler.declareForInput(pathOperations, (functionId) => {
+        const requestIdentifier = builders.identifier('request');
+        const pathMatchIdentifier = builders.identifier('pathMatch');
+        const contextIdentifier = builders.identifier('context');
+
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         Object.entries(pathOperations).forEach(([method, operation]) => {
@@ -26,20 +31,27 @@ export function compilePath(compiler: Compiler, pathOperations: OpenAPIPath) {
                 builders.ifStatement(
                     builders.binaryExpression(
                         '===',
-                        builders.memberExpression(value, builders.identifier('method')),
+                        builders.memberExpression(requestIdentifier, builders.identifier('method')),
                         builders.literal(method),
                     ),
                     builders.blockStatement([
                         builders.returnStatement(
-                            builders.callExpression(fnOperation, [path, value, context]),
+                            builders.callExpression(fnOperation, [requestIdentifier, pathMatchIdentifier, contextIdentifier]),
                         ),
                     ]),
                 ),
             );
         });
 
-        nodes.push(builders.returnStatement(error('method not supported')));
+        nodes.push(builders.returnStatement(buildValidationError('method not supported')));
 
-        return nodes;
+        return builders.functionDeclaration(functionId,
+            [
+                requestIdentifier,
+                pathMatchIdentifier,
+                contextIdentifier,
+            ],
+            builders.blockStatement(nodes)
+        )
     });
 }

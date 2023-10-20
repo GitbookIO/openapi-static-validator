@@ -41,7 +41,7 @@ const PRESERVE_PROPS = [
  * Normalize the input value as an object.
  */
 function normalizeHashInput(input: any): object {
-    if (typeof input !== 'object' || input === null) {
+    if (typeof input === 'object' && input !== null) {
         // Remove all properties that are not important for the hash.
         input = Object.keys(input).reduce((acc, key) => {
             if (PRESERVE_PROPS.includes(key)) {

@@ -3,7 +3,7 @@ import { namedTypes, builders } from 'ast-types';
 import { Compiler } from './compiler';
 import { OpenAPIOperation } from './types';
 import { compileValueSchema } from './compileValueSchema';
-import { ValidationErrorIdentifier } from './error';
+import { ValidationErrorIdentifier, buildValidationError } from './error';
 
 /**
  * Compile an operation into a function.
@@ -17,7 +17,11 @@ import { ValidationErrorIdentifier } from './error';
  * }
  */
 export function compileOperation(compiler: Compiler, operation: OpenAPIOperation) {
-    return compiler.declareValidationFunction(operation, ({ value, path, error }) => {
+    return compiler.declareForInput(operation, (functionId) => {
+        const requestIdentifier = builders.identifier('request');
+        const pathMatchIdentifier = builders.identifier('pathMatch');
+        const contextIdentifier = builders.identifier('context');
+
         const nodes: namedTypes.BlockStatement['body'] = [];
 
         if (operation.operationId) {
@@ -25,7 +29,7 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
                 builders.expressionStatement(
                     builders.assignmentExpression(
                         '=',
-                        builders.memberExpression(value, builders.identifier('operationId')),
+                        builders.memberExpression(requestIdentifier, builders.identifier('operationId')),
                         builders.literal(operation.operationId),
                     ),
                 ),
@@ -38,11 +42,11 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
                     builders.ifStatement(
                         builders.binaryExpression(
                             '===',
-                            builders.memberExpression(value, builders.identifier('body')),
+                            builders.memberExpression(requestIdentifier, builders.identifier('body')),
                             builders.identifier('undefined'),
                         ),
                         builders.blockStatement([
-                            builders.returnStatement(error('body is required')),
+                            builders.returnStatement(buildValidationError('body is required')),
                         ]),
                     ),
                 );
@@ -59,10 +63,9 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
                             bodyResult,
                             builders.callExpression(bodyFn, [
                                 builders.arrayExpression([
-                                    builders.spreadElement(path),
                                     builders.literal('body'),
                                 ]),
-                                builders.memberExpression(value, builders.identifier('body')),
+                                builders.memberExpression(requestIdentifier, builders.identifier('body')),
                             ]),
                         ),
                     ]),
@@ -80,7 +83,7 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
                             builders.expressionStatement(
                                 builders.assignmentExpression(
                                     '=',
-                                    builders.memberExpression(value, builders.identifier('body')),
+                                    builders.memberExpression(requestIdentifier, builders.identifier('body')),
                                     bodyResult,
                                 ),
                             ),
@@ -93,18 +96,25 @@ export function compileOperation(compiler: Compiler, operation: OpenAPIOperation
                 builders.ifStatement(
                     builders.binaryExpression(
                         '!==',
-                        builders.memberExpression(value, builders.identifier('body')),
+                        builders.memberExpression(requestIdentifier, builders.identifier('body')),
                         builders.identifier('undefined'),
                     ),
                     builders.blockStatement([
-                        builders.returnStatement(error('body is not allowed')),
+                        builders.returnStatement(buildValidationError('body is not allowed')),
                     ]),
                 ),
             );
         }
 
-        nodes.push(builders.returnStatement(value));
+        nodes.push(builders.returnStatement(requestIdentifier));
 
-        return nodes;
+        return builders.functionDeclaration(functionId,
+            [
+                requestIdentifier,
+                pathMatchIdentifier,
+                contextIdentifier,
+            ],
+            builders.blockStatement(nodes)
+        )
     });
 }
