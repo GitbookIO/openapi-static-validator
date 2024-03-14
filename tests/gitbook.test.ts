@@ -231,3 +231,90 @@ test('GET spaces/space_iphone-doc/content/path/apps%2Fphone', () => {
         },
     });
 });
+
+test('GET spaces/space_iphone-doc/revisions/somerevision/files', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/revisions/somerevision/files',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {},
+    });
+    expect(result).toMatchObject({
+        operationId: 'listFilesInRevisionById',
+        params: {
+            spaceId: 'space_iphone-doc',
+            revisionId: 'somerevision',
+        },
+    });
+});
+
+test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/revisions/somerevision/files',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            limit: '1',
+        },
+    });
+    expect(result).toMatchObject({
+        operationId: 'listFilesInRevisionById',
+        query: {
+            limit: 1,
+        },
+        params: {
+            spaceId: 'space_iphone-doc',
+            revisionId: 'somerevision',
+        },
+    });
+});
+
+test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=false', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/revisions/somerevision/files',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            metadata: 'false',
+        },
+    });
+    expect(result).toMatchObject({
+        operationId: 'listFilesInRevisionById',
+        query: {
+            metadata: false,
+        },
+        params: {
+            spaceId: 'space_iphone-doc',
+            revisionId: 'somerevision',
+        },
+    });
+});
+
+test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=true', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/revisions/somerevision/files',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            metadata: 'true',
+        },
+    });
+    expect(result).toMatchObject({
+        operationId: 'listFilesInRevisionById',
+        query: {
+            metadata: true,
+        },
+        params: {
+            spaceId: 'space_iphone-doc',
+            revisionId: 'somerevision',
+        },
+    });
+});
