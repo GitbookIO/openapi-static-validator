@@ -327,7 +327,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1000 (inval
             'content-type': 'application/json',
         },
         query: {
-            limit: '1000'
+            limit: '1000',
         },
     });
     expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);
@@ -341,7 +341,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=-1 (invalid
             'content-type': 'application/json',
         },
         query: {
-            limit: '-1'
+            limit: '-1',
         },
     });
     expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);

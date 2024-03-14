@@ -18,7 +18,7 @@ describe('Number', () => {
             maximum: 10,
         });
         expect(compiler.compile()).toMatchSnapshot();
-    })
+    });
 
     test('maximum exclusiveMaximum', () => {
         const compiler = new Compiler();
@@ -28,7 +28,7 @@ describe('Number', () => {
             exclusiveMaximum: true,
         });
         expect(compiler.compile()).toMatchSnapshot();
-    })
+    });
 
     test('minimum', () => {
         const compiler = new Compiler();
@@ -37,7 +37,7 @@ describe('Number', () => {
             minimum: 10,
         });
         expect(compiler.compile()).toMatchSnapshot();
-    })
+    });
 
     test('minimim exclusiveMinimum', () => {
         const compiler = new Compiler();
@@ -47,7 +47,7 @@ describe('Number', () => {
             exclusiveMinimum: true,
         });
         expect(compiler.compile()).toMatchSnapshot();
-    })
+    });
 });
 
 describe('Integer', () => {

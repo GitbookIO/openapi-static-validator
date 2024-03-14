@@ -76,15 +76,19 @@ interface CommonNumberSchema {
     exclusiveMinimum?: boolean;
     exclusiveMaximum?: boolean;
 }
-export interface OpenAPINumberSchema extends CommonNumberSchema, OpenAPINullableSchema, OpenAPIEnumableSchema {
+export interface OpenAPINumberSchema
+    extends CommonNumberSchema,
+        OpenAPINullableSchema,
+        OpenAPIEnumableSchema {
     type: 'number';
     maximum?: number;
     minimum?: number;
 }
 
-
-
-export interface OpenAPIIntegerSchema extends CommonNumberSchema, OpenAPINullableSchema, OpenAPIEnumableSchema {
+export interface OpenAPIIntegerSchema
+    extends CommonNumberSchema,
+        OpenAPINullableSchema,
+        OpenAPIEnumableSchema {
     type: 'integer';
     format?: 'int32';
 }
