@@ -250,7 +250,6 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files', () => {
     });
 });
 
-
 test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1', () => {
     const result = validateRequest({
         path: '/spaces/space_iphone-doc/revisions/somerevision/files',
@@ -265,7 +264,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1', () => {
     expect(result).toMatchObject({
         operationId: 'listFilesInRevisionById',
         query: {
-            limit: 1
+            limit: 1,
         },
         params: {
             spaceId: 'space_iphone-doc',
@@ -273,7 +272,6 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1', () => {
         },
     });
 });
-
 
 test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=false', () => {
     const result = validateRequest({
@@ -289,7 +287,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=false', 
     expect(result).toMatchObject({
         operationId: 'listFilesInRevisionById',
         query: {
-            metadata: false
+            metadata: false,
         },
         params: {
             spaceId: 'space_iphone-doc',
@@ -297,7 +295,6 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=false', 
         },
     });
 });
-
 
 test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=true', () => {
     const result = validateRequest({
@@ -313,7 +310,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=true', (
     expect(result).toMatchObject({
         operationId: 'listFilesInRevisionById',
         query: {
-            metadata: true
+            metadata: true,
         },
         params: {
             spaceId: 'space_iphone-doc',
