@@ -318,3 +318,31 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=true', (
         },
     });
 });
+
+test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1000 (invalid, number above maximum)', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/revisions/somerevision/files',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            limit: '1000',
+        },
+    });
+    expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);
+});
+
+test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=-1 (invalid, number below minimum)', () => {
+    const result = validateRequest({
+        path: '/spaces/space_iphone-doc/revisions/somerevision/files',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            limit: '-1',
+        },
+    });
+    expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);
+});

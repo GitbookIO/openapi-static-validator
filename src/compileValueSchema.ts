@@ -657,6 +657,36 @@ function compileNumberSchema(
             ),
         );
 
+        if (schema.maximum !== undefined) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        schema.exclusiveMaximum ? '>=' : '>',
+                        value,
+                        builders.literal(schema.maximum),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(error('value greater than maximum')),
+                    ]),
+                ),
+            );
+        }
+
+        if (schema.minimum !== undefined) {
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        schema.exclusiveMinimum ? '<=' : '<',
+                        value,
+                        builders.literal(schema.minimum),
+                    ),
+                    builders.blockStatement([
+                        builders.returnStatement(error('value less than minimum')),
+                    ]),
+                ),
+            );
+        }
+
         nodes.push(builders.returnStatement(value));
 
         return nodes;

@@ -70,11 +70,25 @@ export interface OpenAPIStringSchema extends OpenAPINullableSchema, OpenAPIEnuma
     pattern?: string;
 }
 
-export interface OpenAPINumberSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
+interface CommonNumberSchema {
+    maximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: boolean;
+    exclusiveMaximum?: boolean;
+}
+export interface OpenAPINumberSchema
+    extends CommonNumberSchema,
+        OpenAPINullableSchema,
+        OpenAPIEnumableSchema {
     type: 'number';
+    maximum?: number;
+    minimum?: number;
 }
 
-export interface OpenAPIIntegerSchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
+export interface OpenAPIIntegerSchema
+    extends CommonNumberSchema,
+        OpenAPINullableSchema,
+        OpenAPIEnumableSchema {
     type: 'integer';
     format?: 'int32';
 }
