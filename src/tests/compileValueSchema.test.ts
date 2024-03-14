@@ -10,6 +10,44 @@ describe('Number', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('maximum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            maximum: 10,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    })
+
+    test('maximum exclusiveMaximum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            maximum: 10,
+            exclusiveMaximum: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    })
+
+    test('minimum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            minimum: 10,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    })
+
+    test('minimim exclusiveMinimum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            minimum: 10,
+            exclusiveMinimum: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    })
 });
 
 describe('Integer', () => {
