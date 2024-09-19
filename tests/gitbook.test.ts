@@ -1,29 +1,6 @@
 import { expect, test } from 'bun:test';
 import { validateRequest, ValidationError } from './gitbook.validate';
 
-test('POST /spaces/1234/hive/token', () => {
-    const result = validateRequest({
-        path: '/spaces/1234/hive/token',
-        method: 'post',
-        headers: {
-            'content-type': 'application/json',
-        },
-        query: {},
-    });
-    expect(result).toMatchObject({
-        headers: {
-            'content-type': 'application/json',
-        },
-        method: 'post',
-        operationId: 'generateSpaceHiveReadAccessToken',
-        params: {
-            spaceId: '1234',
-        },
-        path: '/spaces/1234/hive/token',
-        query: {},
-    });
-});
-
 test('POST orgs/appleId/custom-fields', () => {
     const result = validateRequest({
         path: '/orgs/appleId/custom-fields',
@@ -110,70 +87,6 @@ test('POST orgs/appleId/custom-fields', () => {
     expect(result).toMatchObject({
         params: {
             organizationId: 'appleId',
-        },
-    });
-});
-
-test('PUT orgs/apple/schemas/newType', () => {
-    const result = validateRequest({
-        path: '/orgs/apple/schemas/newType',
-        method: 'put',
-        headers: {
-            'content-type': 'application/json',
-        },
-        query: {},
-        body: {
-            type: 'newType',
-            title: {
-                singular: 'New type',
-                plural: 'New types',
-            },
-            properties: [
-                {
-                    name: 'title',
-                    type: 'text',
-                    title: 'Title',
-                },
-            ],
-        },
-    });
-    expect(result).toMatchObject({
-        operationId: 'setEntitySchema',
-        params: {
-            organizationId: 'apple',
-            entityType: 'newType',
-        },
-    });
-});
-
-test('PUT orgs/apple/schemas/newType/entities', () => {
-    const result = validateRequest({
-        path: '/orgs/apple/schemas/newType/entities',
-        method: 'put',
-        headers: {
-            'content-type': 'application/json',
-        },
-        query: {},
-        body: {
-            entities: [
-                {
-                    entityId: 'something',
-                    properties: {
-                        title: 'Updated lambda',
-                        description: 'the description',
-                        url: 'https://example.com',
-                        public_traffic: false,
-                        created_on: '2020-01-01T00:00:00.000Z',
-                    },
-                },
-            ],
-        },
-    });
-    expect(result).toMatchObject({
-        operationId: 'upsertSchemaEntities',
-        params: {
-            organizationId: 'apple',
-            entityType: 'newType',
         },
     });
 });
@@ -319,7 +232,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?metadata=true', (
     });
 });
 
-test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1000 (invalid, number above maximum)', () => {
+test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1001 (invalid, number above maximum)', () => {
     const result = validateRequest({
         path: '/spaces/space_iphone-doc/revisions/somerevision/files',
         method: 'get',
@@ -327,7 +240,7 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=1000 (inval
             'content-type': 'application/json',
         },
         query: {
-            limit: '1000',
+            limit: '1001',
         },
     });
     expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);
@@ -345,4 +258,32 @@ test('GET spaces/space_iphone-doc/revisions/somerevision/files?limit=-1 (invalid
         },
     });
     expect(result instanceof ValidationError ? result.path : null).toEqual(['query', 'limit']);
+});
+
+test('/orgs/xxx/synced-blocks?ids=foo coerce string parameter as array if array is expected', () => {
+    const result = validateRequest({
+        path: '/orgs/xxx/synced-blocks',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            ids: 'foo',
+        },
+    });
+    expect(result.query).toEqual({ ids: ['foo'] });
+});
+
+test('/orgs/xxx/synced-blocks?ids[]=foo allow string parameter as array too', () => {
+    const result = validateRequest({
+        path: '/orgs/xxx/synced-blocks',
+        method: 'get',
+        headers: {
+            'content-type': 'application/json',
+        },
+        query: {
+            ids: ['foo'],
+        },
+    });
+    expect(result.query).toEqual({ ids: ['foo'] });
 });

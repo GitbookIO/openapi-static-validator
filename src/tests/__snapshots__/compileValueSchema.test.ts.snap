@@ -3,9 +3,9 @@
 exports[`Number basic 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -42,9 +42,9 @@ function obj0(path, value, context) {
 exports[`Number maximum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -84,9 +84,9 @@ function obj0(path, value, context) {
 exports[`Number maximum exclusiveMaximum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -126,9 +126,9 @@ function obj0(path, value, context) {
 exports[`Number minimum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -168,9 +168,9 @@ function obj0(path, value, context) {
 exports[`Number minimim exclusiveMinimum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -210,9 +210,9 @@ function obj0(path, value, context) {
 exports[`Integer basic 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -249,9 +249,9 @@ function obj0(path, value, context) {
 exports[`Nullable nullable: true 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -291,9 +291,9 @@ function obj0(path, value, context) {
 exports[`String with enum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -327,9 +327,9 @@ function obj0(path, value, context) {
 exports[`String with pattern 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -367,9 +367,9 @@ function obj0(path, value, context) {
 exports[`String with pattern 2`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -407,9 +407,9 @@ function obj0(path, value, context) {
 exports[`Objects with a required prop 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -485,9 +485,9 @@ function obj0(path, value, context) {
 exports[`Objects with a default value 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -545,9 +545,9 @@ function obj0(path, value, context) {
 exports[`Objects as free form object 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -582,9 +582,9 @@ function obj0(path, value, context) {
 exports[`Objects with additionalProperties: true 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -642,9 +642,9 @@ function obj0(path, value, context) {
 exports[`Objects with additionalProperties: {} 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -718,9 +718,9 @@ function obj0(path, value, context) {
 exports[`Objects with minProperties/maxProperties 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -761,9 +761,9 @@ function obj0(path, value, context) {
 exports[`Array minItems / maxItems 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -819,9 +819,9 @@ function obj0(path, value, context) {
 exports[`Array uniqueItems 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -876,9 +876,9 @@ function obj0(path, value, context) {
 exports[`anyOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -932,9 +932,9 @@ function obj0(path, value, context) {
 exports[`oneOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
@@ -995,9 +995,9 @@ function obj0(path, value, context) {
 exports[`allOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
