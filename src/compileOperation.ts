@@ -140,11 +140,14 @@ export function compileOperation(
             const parameter = compiler.resolveMaybeRef(refParameter);
             const paramValueIdentifier = builders.identifier(`queryParam${index}`);
             const resultIdentifier = builders.identifier(`queryParamResult${index}`);
+
             const schemaFn = compileValueSchema(compiler, parameter.schema);
+
+            const isArrayType = 'type' in parameter.schema && parameter.schema.type === 'array';
 
             // Assign the query parameter to a variable
             nodes.push(
-                builders.variableDeclaration('const', [
+                builders.variableDeclaration('let', [
                     builders.variableDeclarator(
                         paramValueIdentifier,
                         builders.memberExpression(
@@ -179,6 +182,29 @@ export function compileOperation(
                             : [],
                     ),
                     builders.blockStatement([
+                        // If expected type is array, convert to array if it's a string
+                        ...(isArrayType
+                            ? [
+                                  builders.ifStatement(
+                                      // typeof paramValue === 'string'
+                                      builders.binaryExpression(
+                                          '===',
+                                          builders.unaryExpression('typeof', paramValueIdentifier),
+                                          builders.literal('string'),
+                                      ),
+                                      builders.blockStatement([
+                                          // paramValue = [paramValue]
+                                          builders.expressionStatement(
+                                              builders.assignmentExpression(
+                                                  '=',
+                                                  paramValueIdentifier,
+                                                  builders.arrayExpression([paramValueIdentifier]),
+                                              ),
+                                          ),
+                                      ]),
+                                  ),
+                              ]
+                            : []),
                         // Validate the value
                         builders.variableDeclaration('const', [
                             builders.variableDeclarator(

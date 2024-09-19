@@ -9,9 +9,9 @@ import { annotateWithJSDocComment } from './comments';
 
 const COMMENT = `
 Validate a request against the OpenAPI spec
-@param {{ method: string; path: string; body?: any; query: Record<string, string>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
 @param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
-@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string>; body?: any; headers: Record<string, string>; }}
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 `;
 
 /**
