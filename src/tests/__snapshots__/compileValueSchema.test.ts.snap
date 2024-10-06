@@ -10,6 +10,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -49,6 +54,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -91,6 +101,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -133,6 +148,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -175,6 +195,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -217,6 +242,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -256,6 +286,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -298,6 +333,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -334,6 +374,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -374,6 +419,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -414,6 +464,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -492,6 +547,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -552,6 +612,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -589,6 +654,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -649,6 +719,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -725,6 +800,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -768,6 +848,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -826,6 +911,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -883,6 +973,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -939,6 +1034,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/
@@ -1002,6 +1102,11 @@ Validate a request against the OpenAPI spec
 export function validateRequest(request, context) {
     return new RequestError(404, 'no operation match path');
 }
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
 export class RequestError extends Error {
     /** @param {number} code HTTP code for the error
 @param {string} message The error message*/

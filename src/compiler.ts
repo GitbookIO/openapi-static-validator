@@ -5,6 +5,7 @@ import { OpenAPIRef, OpenAPISpec } from './types';
 import { compileValueSchema } from './compileValueSchema';
 import { hash } from './hash';
 import { compileValidateRequest } from './compileValidateRequest';
+import { compileComponentSchemas } from './compileComponentSchemas';
 
 /**
  * Compiler for OpenAPI specs.
@@ -118,22 +119,12 @@ export class Compiler {
     }
 
     /**
-     * Build the AST from the entire spec.
-     */
-    public indexAllComponents() {
-        // Index all the schema components.
-        const schemas = this.input.components?.schemas ?? {};
-        Object.values(schemas).forEach((schema) => {
-            compileValueSchema(this, schema);
-        });
-    }
-
-    /**
      * Return the AST for the program.
      */
     public ast() {
         return builders.program([
             ...compileValidateRequest(this, this.input),
+            ...compileComponentSchemas(this, this.input.components?.schemas ?? {}),
             ...this.globalDeclarations,
         ]);
     }

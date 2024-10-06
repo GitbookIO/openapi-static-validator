@@ -1,5 +1,5 @@
-import { expect, test } from 'bun:test';
-import { validateRequest, ValidationError } from './gitbook.validate';
+import { describe, expect, test } from 'bun:test';
+import { validateRequest, ValidationError, componentSchemas } from './gitbook.validate';
 
 test('POST orgs/appleId/custom-fields', () => {
     const result = validateRequest({
@@ -286,4 +286,29 @@ test('/orgs/xxx/synced-blocks?ids[]=foo allow string parameter as array too', ()
         },
     });
     expect(result.query).toEqual({ ids: ['foo'] });
+});
+
+describe('componentSchemas', () => {
+    test('should export a function to validate a component', () => {
+        const validate = componentSchemas['ApiInformation'];
+        expect(validate).toBeInstanceOf(Function);
+        expect(
+            validate([], {
+                version: '1.0.0',
+                build: '123',
+            }),
+        ).toEqual({
+            version: '1.0.0',
+            build: '123',
+        });
+
+        const error = validate([], {
+            version: '1.0.0',
+            // Missing property
+        });
+        expect(error instanceof ValidationError ? error.path : null).toEqual([]);
+        expect(error instanceof ValidationError ? error.message : null).toEqual(
+            'expected "build" to be defined',
+        );
+    });
 });
