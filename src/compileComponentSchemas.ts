@@ -6,6 +6,7 @@ import { annotateWithJSDocComment } from './comments';
 
 const COMMENT = `
 Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
 `;
 
 /**

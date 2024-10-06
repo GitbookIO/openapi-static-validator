@@ -12,6 +12,7 @@ export function validateRequest(request, context) {
 }
 /** 
 Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
 */
 export const componentSchemas = {
     'A': obj0,
@@ -95,6 +96,7 @@ export function validateRequest(request, context) {
 }
 /** 
 Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
 */
 export const componentSchemas = {
     'A': obj0,
