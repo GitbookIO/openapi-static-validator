@@ -292,10 +292,12 @@ describe('componentSchemas', () => {
     test('should export a function to validate a component', () => {
         const validate = componentSchemas['ApiInformation'];
         expect(validate).toBeInstanceOf(Function);
-        expect(validate([], {
-            version: '1.0.0',
-            build: '123',
-        })).toEqual({
+        expect(
+            validate([], {
+                version: '1.0.0',
+                build: '123',
+            }),
+        ).toEqual({
             version: '1.0.0',
             build: '123',
         });
@@ -303,8 +305,10 @@ describe('componentSchemas', () => {
         const error = validate([], {
             version: '1.0.0',
             // Missing property
-        })
+        });
         expect(error instanceof ValidationError ? error.path : null).toEqual([]);
-        expect(error instanceof ValidationError ? error.message : null).toEqual('expected "build" to be defined');
+        expect(error instanceof ValidationError ? error.message : null).toEqual(
+            'expected "build" to be defined',
+        );
     });
 });
