@@ -311,4 +311,29 @@ describe('componentSchemas', () => {
             'expected "build" to be defined',
         );
     });
+
+    test('should return a best-effort error for a oneOf', () => {
+        const validate = componentSchemas['DocumentBlocksEssentials'];
+        expect(validate).toBeInstanceOf(Function);
+
+        const error = validate([], {
+            object: 'block',
+            type: 'paragraph',
+            nodes: [
+                // Invalid
+                {
+                    object: 'block',
+                    type: 'paragraph',
+                    nodes: [
+                        {
+                            object: 'text',
+                            text: 'Hello, world!',
+                        },
+                    ],
+                },
+            ],
+        });
+
+        expect(error instanceof ValidationError ? error.path : null).toEqual(['nodes', 0]);
+    });
 });

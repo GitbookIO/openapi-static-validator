@@ -105,8 +105,10 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
 
         // Declare the variable to use as a result, then iterate over each schema
         const resultIdentifier = builders.identifier('result');
+        const errorIdentifier = builders.identifier('error');
         nodes.push(
             builders.variableDeclaration('let', [builders.variableDeclarator(resultIdentifier)]),
+            builders.variableDeclaration('let', [builders.variableDeclarator(errorIdentifier)]),
         );
 
         schema.oneOf.forEach((subSchema, index) => {
@@ -125,14 +127,50 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
 
             nodes.push(
                 builders.ifStatement(
-                    builders.unaryExpression(
-                        '!',
-                        builders.binaryExpression(
-                            'instanceof',
-                            altIdentifier,
-                            ValidationErrorIdentifier,
-                        ),
+                    builders.binaryExpression(
+                        'instanceof',
+                        altIdentifier,
+                        ValidationErrorIdentifier,
                     ),
+                    builders.blockStatement([
+                        // Repalce the error if the new error is more specific (longer path)
+                        builders.ifStatement(
+                            builders.logicalExpression(
+                                '||',
+                                builders.binaryExpression(
+                                    '===',
+                                    errorIdentifier,
+                                    builders.identifier('undefined'),
+                                ),
+                                builders.binaryExpression(
+                                    '<',
+                                    builders.memberExpression(
+                                        builders.memberExpression(
+                                            errorIdentifier,
+                                            builders.identifier('path'),
+                                        ),
+                                        builders.identifier('length'),
+                                    ),
+                                    builders.memberExpression(
+                                        builders.memberExpression(
+                                            altIdentifier,
+                                            builders.identifier('path'),
+                                        ),
+                                        builders.identifier('length'),
+                                    ),
+                                ),
+                            ),
+                            builders.blockStatement([
+                                builders.expressionStatement(
+                                    builders.assignmentExpression(
+                                        '=',
+                                        errorIdentifier,
+                                        altIdentifier,
+                                    ),
+                                ),
+                            ]),
+                        ),
+                    ]),
                     builders.blockStatement([
                         ...(index > 0
                             ? [
@@ -165,7 +203,33 @@ function compileOneOfSchema(compiler: Compiler, schema: OpenAPIOneOfSchema) {
                     resultIdentifier,
                     builders.identifier('undefined'),
                 ),
-                builders.blockStatement([builders.returnStatement(error('expected to match one'))]),
+                builders.blockStatement([
+                    // If the path is longer than one level deep, then we return the error from the evaluation
+                    // other we say that we expected to only match one of the schemas
+                    builders.ifStatement(
+                        builders.logicalExpression(
+                            '&&',
+                            errorIdentifier,
+                            builders.binaryExpression(
+                                '>',
+                                builders.memberExpression(
+                                    builders.memberExpression(
+                                        errorIdentifier,
+                                        builders.identifier('path'),
+                                    ),
+                                    builders.identifier('length'),
+                                ),
+                                builders.binaryExpression(
+                                    '+',
+                                    builders.memberExpression(path, builders.identifier('length')),
+                                    builders.literal(1),
+                                ),
+                            ),
+                        ),
+                        builders.blockStatement([builders.returnStatement(errorIdentifier)]),
+                        builders.returnStatement(error('expected to match one')),
+                    ),
+                ]),
             ),
         );
 
