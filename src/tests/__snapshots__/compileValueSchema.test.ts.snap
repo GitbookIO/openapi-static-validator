@@ -1074,19 +1074,31 @@ function obj2(path, value, context) {
 }
 function obj0(path, value, context) {
     let result;
+    let error;
     const alt0 = obj1(path, value, context);
-    if (!(alt0 instanceof ValidationError)) {
+    if (alt0 instanceof ValidationError) {
+        if (error === undefined || error.path.length < alt0.path.length) {
+            error = alt0;
+        }
+    } else {
         result = alt0;
     }
     const alt1 = obj2(path, value, context);
-    if (!(alt1 instanceof ValidationError)) {
+    if (alt1 instanceof ValidationError) {
+        if (error === undefined || error.path.length < alt1.path.length) {
+            error = alt1;
+        }
+    } else {
         if (result !== undefined) {
             return new ValidationError(path, 'expected to only match one of the schemas');
         }
         result = alt1;
     }
     if (result === undefined) {
-        return new ValidationError(path, 'expected to match one');
+        if (error && error.path.length > path.length + 1) {
+            return error;
+        } else
+            return new ValidationError(path, 'expected to match one');
     }
     return result;
 }"
