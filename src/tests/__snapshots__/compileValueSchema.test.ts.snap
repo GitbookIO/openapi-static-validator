@@ -4,7 +4,7 @@ exports[`Number basic 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -48,7 +48,7 @@ exports[`Number maximum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -95,7 +95,7 @@ exports[`Number maximum exclusiveMaximum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -142,7 +142,7 @@ exports[`Number minimum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -189,7 +189,7 @@ exports[`Number minimim exclusiveMinimum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -236,7 +236,7 @@ exports[`Integer basic 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -280,7 +280,7 @@ exports[`Nullable nullable: true 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -327,7 +327,7 @@ exports[`String with enum 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -368,7 +368,7 @@ exports[`String with pattern 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -413,7 +413,7 @@ exports[`String with pattern 2`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -450,6 +450,57 @@ function obj0(path, value, context) {
     if (formatResult instanceof ValidationError) {
         return formatResult;
     }
+    if (typeof formatResult === 'string') {
+        value = formatResult;
+    }
+    return value;
+}"
+`;
+
+exports[`String with format 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'expected a string');
+    }
+    const formatResult = context?.stringFormats?.['uri']?.(value, path);
+    if (formatResult instanceof ValidationError) {
+        return formatResult;
+    }
+    if (typeof formatResult === 'string') {
+        value = formatResult;
+    }
     return value;
 }"
 `;
@@ -458,7 +509,7 @@ exports[`Objects with a required prop 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -541,7 +592,7 @@ exports[`Objects with a default value 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -606,7 +657,7 @@ exports[`Objects as free form object 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -648,7 +699,7 @@ exports[`Objects with additionalProperties: true 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -713,7 +764,7 @@ exports[`Objects with additionalProperties: {} 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -794,7 +845,7 @@ exports[`Objects with minProperties/maxProperties 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -842,7 +893,7 @@ exports[`Array minItems / maxItems 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -905,7 +956,7 @@ exports[`Array uniqueItems 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -967,7 +1018,7 @@ exports[`anyOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -1028,7 +1079,7 @@ exports[`oneOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
@@ -1108,7 +1159,7 @@ exports[`allOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
 @param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
-@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | null } }} [context] - Context object to pass to validation functions
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
 @returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
 */
 export function validateRequest(request, context) {
