@@ -814,6 +814,20 @@ function compileStringSchema(compiler: Compiler, schema: OpenAPIStringSchema) {
                     builders.blockStatement([builders.returnStatement(formatResult)]),
                 ),
             );
+            nodes.push(
+                builders.ifStatement(
+                    builders.binaryExpression(
+                        '===',
+                        builders.unaryExpression('typeof', formatResult),
+                        builders.literal('string'),
+                    ),
+                    builders.blockStatement([
+                        builders.expressionStatement(
+                            builders.assignmentExpression('=', value, formatResult),
+                        ),
+                    ]),
+                ),
+            );
         }
 
         if (schema.minLength) {
