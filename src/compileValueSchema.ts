@@ -987,7 +987,11 @@ function compileEnumableCheck(
         builders.ifStatement(
             schema.enum.reduce(
                 (acc, val) => {
-                    const test = builders.binaryExpression('!==', value, builders.literal(val));
+                    // Handle negative numbers by creating a unary expression instead of a negative literal
+                    const literalValue = typeof val === 'number' && val < 0 
+                        ? builders.unaryExpression('-', builders.literal(-val)) 
+                        : builders.literal(val);
+                    const test = builders.binaryExpression('!==', value, literalValue);
 
                     if (!acc) {
                         return test;
