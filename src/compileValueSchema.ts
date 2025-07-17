@@ -21,7 +21,9 @@ import { ValidationErrorIdentifier } from './error';
  * Creates a literal value that handles negative numbers properly for escodegen.
  * For negative numbers, creates a unary expression instead of a negative literal.
  */
-function createSafeLiteral(value: string | number | boolean): namedTypes.Literal | namedTypes.UnaryExpression {
+function createSafeLiteral(
+    value: string | number | boolean,
+): namedTypes.Literal | namedTypes.UnaryExpression {
     if (typeof value === 'number' && value < 0) {
         return builders.unaryExpression('-', builders.literal(-value));
     }
