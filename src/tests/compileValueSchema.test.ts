@@ -48,6 +48,44 @@ describe('Number', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('negative maximum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            maximum: -5,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative minimum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            minimum: -10,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative maximum exclusiveMaximum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            maximum: -5,
+            exclusiveMaximum: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative minimum exclusiveMinimum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'number',
+            minimum: -10,
+            exclusiveMinimum: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 describe('Integer', () => {
@@ -56,6 +94,53 @@ describe('Integer', () => {
         compileValueSchema(compiler, {
             type: 'integer',
             format: 'int32',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            enum: [-1, 0, 1],
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative maximum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            maximum: -5,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative minimum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            minimum: -10,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative maximum exclusiveMaximum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            maximum: -5,
+            exclusiveMaximum: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('negative minimum exclusiveMinimum', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            minimum: -10,
+            exclusiveMinimum: true,
         });
         expect(compiler.compile()).toMatchSnapshot();
     });

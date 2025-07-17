@@ -18,6 +18,19 @@ import {
 import { ValidationErrorIdentifier } from './error';
 
 /**
+ * Creates a literal value that handles negative numbers properly for escodegen.
+ * For negative numbers, creates a unary expression instead of a negative literal.
+ */
+function createSafeLiteral(
+    value: string | number | boolean,
+): namedTypes.Literal | namedTypes.UnaryExpression {
+    if (typeof value === 'number' && value < 0) {
+        return builders.unaryExpression('-', builders.literal(-value));
+    }
+    return builders.literal(value);
+}
+
+/**
  * Compile a JSON schema into a validation function.
  */
 export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchema) {
@@ -727,7 +740,7 @@ function compileNumberSchema(
                     builders.binaryExpression(
                         schema.exclusiveMaximum ? '>=' : '>',
                         value,
-                        builders.literal(schema.maximum),
+                        createSafeLiteral(schema.maximum),
                     ),
                     builders.blockStatement([
                         builders.returnStatement(error('value greater than maximum')),
@@ -742,7 +755,7 @@ function compileNumberSchema(
                     builders.binaryExpression(
                         schema.exclusiveMinimum ? '<=' : '<',
                         value,
-                        builders.literal(schema.minimum),
+                        createSafeLiteral(schema.minimum),
                     ),
                     builders.blockStatement([
                         builders.returnStatement(error('value less than minimum')),
@@ -987,7 +1000,8 @@ function compileEnumableCheck(
         builders.ifStatement(
             schema.enum.reduce(
                 (acc, val) => {
-                    const test = builders.binaryExpression('!==', value, builders.literal(val));
+                    const literalValue = createSafeLiteral(val);
+                    const test = builders.binaryExpression('!==', value, literalValue);
 
                     if (!acc) {
                         return test;
