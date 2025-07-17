@@ -1295,3 +1295,379 @@ function obj0(path, value, context) {
     return value;
 }"
 `;
+
+exports[`Number negative maximum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value > -5) {
+        return new ValidationError(path, 'value greater than maximum');
+    }
+    return value;
+}"
+`;
+
+exports[`Number negative minimum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value < -10) {
+        return new ValidationError(path, 'value less than minimum');
+    }
+    return value;
+}"
+`;
+
+exports[`Number negative maximum exclusiveMaximum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value >= -5) {
+        return new ValidationError(path, 'value greater than maximum');
+    }
+    return value;
+}"
+`;
+
+exports[`Number negative minimum exclusiveMinimum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value <= -10) {
+        return new ValidationError(path, 'value less than minimum');
+    }
+    return value;
+}"
+`;
+
+exports[`Integer negative maximum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value > -5) {
+        return new ValidationError(path, 'value greater than maximum');
+    }
+    return value;
+}"
+`;
+
+exports[`Integer negative minimum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value < -10) {
+        return new ValidationError(path, 'value less than minimum');
+    }
+    return value;
+}"
+`;
+
+exports[`Integer negative maximum exclusiveMaximum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value >= -5) {
+        return new ValidationError(path, 'value greater than maximum');
+    }
+    return value;
+}"
+`;
+
+exports[`Integer negative minimum exclusiveMinimum 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    if (value <= -10) {
+        return new ValidationError(path, 'value less than minimum');
+    }
+    return value;
+}"
+`;
