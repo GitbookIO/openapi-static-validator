@@ -59,6 +59,15 @@ describe('Integer', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('negative', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'integer',
+            enum: [-1, 0, 1],
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 describe('Nullable', () => {
