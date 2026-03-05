@@ -276,6 +276,17 @@ describe('Objects', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('with propertyNames', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'object',
+            propertyNames: {
+                pattern: '^[a-z]+$',
+            },
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 describe('Array', () => {

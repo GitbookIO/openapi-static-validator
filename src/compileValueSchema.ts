@@ -12,6 +12,7 @@ import {
     OpenAPINumberSchema,
     OpenAPIObjectSchema,
     OpenAPIOneOfSchema,
+    OpenAPIPropertyNamesSchema,
     OpenAPIStringSchema,
     OpenAPIValueSchema,
 } from './types';
@@ -69,6 +70,17 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
     }
 
     return compileAnySchema(compiler, schema);
+}
+
+function normalizePropertyNamesSchema(schema: OpenAPIPropertyNamesSchema): OpenAPIValueSchema {
+    if ('type' in schema || 'anyOf' in schema || 'oneOf' in schema || 'allOf' in schema) {
+        return schema;
+    }
+
+    return {
+        type: 'string',
+        ...schema,
+    };
 }
 
 function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
@@ -336,6 +348,49 @@ function compileObjectSchema(compiler: Compiler, schema: OpenAPIObjectSchema) {
                 ),
             ]),
         );
+
+        if (schema.propertyNames) {
+            const keyIdentifier = builders.identifier('key');
+            const keyResultIdentifier = builders.identifier('keyResult');
+            const propertyNamesSchemaIdentifier = compileValueSchema(
+                compiler,
+                normalizePropertyNamesSchema(schema.propertyNames),
+            );
+
+            nodes.push(
+                builders.forOfStatement(
+                    builders.variableDeclaration('const', [
+                        builders.variableDeclarator(keyIdentifier),
+                    ]),
+                    keysIdentifier,
+                    builders.blockStatement([
+                        builders.variableDeclaration('const', [
+                            builders.variableDeclarator(
+                                keyResultIdentifier,
+                                builders.callExpression(propertyNamesSchemaIdentifier, [
+                                    builders.arrayExpression([
+                                        builders.spreadElement(path),
+                                        keyIdentifier,
+                                    ]),
+                                    keyIdentifier,
+                                    context,
+                                ]),
+                            ),
+                        ]),
+                        builders.ifStatement(
+                            builders.binaryExpression(
+                                'instanceof',
+                                keyResultIdentifier,
+                                ValidationErrorIdentifier,
+                            ),
+                            builders.blockStatement([
+                                builders.returnStatement(keyResultIdentifier),
+                            ]),
+                        ),
+                    ]),
+                ),
+            );
+        }
 
         if (schema.minProperties) {
             nodes.push(

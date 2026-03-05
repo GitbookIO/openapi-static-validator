@@ -23,6 +23,7 @@ const PRESERVE_PROPS = [
     'pattern',
     'format',
     'properties',
+    'propertyNames',
     'additionalProperties',
     'minProperties',
     'maxProperties',
