@@ -1492,6 +1492,88 @@ function obj0(path, value, context) {
 }"
 `;
 
+exports[`Array without items 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (!Array.isArray(value)) {
+        return new ValidationError(path, 'expected an array');
+    }
+    return value;
+}"
+`;
+
+exports[`Array without items and uniqueItems 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (!Array.isArray(value)) {
+        return new ValidationError(path, 'expected an array');
+    }
+    return value;
+}"
+`;
+
 exports[`anyOf 1`] = `
 "/** 
 Validate a request against the OpenAPI spec
@@ -1730,5 +1812,226 @@ function obj0(path, value, context) {
         return result;
     }
     return result;
+}"
+`;
+
+exports[`OpenAPI 3.1 type: null 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj0(path, value, context) {
+    if (value !== null) {
+        return new ValidationError(path, 'expected null');
+    }
+    return value;
+}"
+`;
+
+exports[`OpenAPI 3.1 type array type: [string, null] 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj1(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'expected a string');
+    }
+    return value;
+}
+function obj2(path, value, context) {
+    if (value !== null) {
+        return new ValidationError(path, 'expected null');
+    }
+    return value;
+}
+function obj0(path, value, context) {
+    const value0 = obj1(path, value, context);
+    if (!(value0 instanceof ValidationError)) {
+        return value0;
+    }
+    const value1 = obj2(path, value, context);
+    if (!(value1 instanceof ValidationError)) {
+        return value1;
+    }
+    return new ValidationError(path, 'expected one of the anyOf schemas to match');
+}"
+`;
+
+exports[`OpenAPI 3.1 type array type: [string, number] 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj1(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'expected a string');
+    }
+    return value;
+}
+function obj2(path, value, context) {
+    if (typeof value === 'string') {
+        value = Number(value);
+    }
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return new ValidationError(path, 'expected a number');
+    }
+    return value;
+}
+function obj0(path, value, context) {
+    const value0 = obj1(path, value, context);
+    if (!(value0 instanceof ValidationError)) {
+        return value0;
+    }
+    const value1 = obj2(path, value, context);
+    if (!(value1 instanceof ValidationError)) {
+        return value1;
+    }
+    return new ValidationError(path, 'expected one of the anyOf schemas to match');
+}"
+`;
+
+exports[`OpenAPI 3.1 type array type: [string, null] with minLength 1`] = `
+"/** 
+Validate a request against the OpenAPI spec
+@param {{ method: string; path: string; body?: any; query: Record<string, string | string[]>; headers: Record<string, string>; }} request - Input request to validate
+@param {{ stringFormats?: { [format: string]: (value: string, path: string[]) => ValidationError | string | null } }} [context] - Context object to pass to validation functions
+@returns {{ operationId?: string; params: Record<string, string>; query: Record<string, string | string[]>; body?: any; headers: Record<string, string>; }}
+*/
+export function validateRequest(request, context) {
+    return new RequestError(404, 'no operation match path');
+}
+/** 
+Map of all components defined in the spec to their validation functions.
+{Object.<string, <T>(path: string[], value: T, context: any) => (T | ValidationError)>}
+*/
+export const componentSchemas = {};
+export class RequestError extends Error {
+    /** @param {number} code HTTP code for the error
+@param {string} message The error message*/
+    constructor(code, message) {
+        super(message);
+        /** @type {number} HTTP code for the error*/
+        this.code = code;
+    }
+}
+export class ValidationError extends RequestError {
+    /** @param {string[]} path The path that failed validation
+@param {string} message The error message*/
+    constructor(path, message) {
+        super(409, message);
+        /** @type {string[]} The path that failed validation*/
+        this.path = path;
+    }
+}
+function obj1(path, value, context) {
+    if (typeof value !== 'string') {
+        return new ValidationError(path, 'expected a string');
+    }
+    if (value.length < 1) {
+        return new ValidationError(path, 'expected at least 1 characters');
+    }
+    return value;
+}
+function obj2(path, value, context) {
+    if (value !== null) {
+        return new ValidationError(path, 'expected null');
+    }
+    return value;
+}
+function obj0(path, value, context) {
+    const value0 = obj1(path, value, context);
+    if (!(value0 instanceof ValidationError)) {
+        return value0;
+    }
+    const value1 = obj2(path, value, context);
+    if (!(value1 instanceof ValidationError)) {
+        return value1;
+    }
+    return new ValidationError(path, 'expected one of the anyOf schemas to match');
 }"
 `;

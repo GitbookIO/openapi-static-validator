@@ -48,7 +48,9 @@ export type OpenAPIValueSchema =
     | OpenAPIBooleanSchema
     | OpenAPIObjectSchema
     | OpenAPIArraySchema
-    | OpenAPIRef;
+    | OpenAPIRef
+    | OpenAPINullSchema
+    | OpenAPITypeArraySchema;
 
 export interface OpenAPIAllOfSchema {
     allOf: OpenAPIValueSchema[];
@@ -113,10 +115,24 @@ export interface OpenAPIObjectSchema extends OpenAPINullableSchema {
 
 export interface OpenAPIArraySchema extends OpenAPINullableSchema {
     type: 'array';
-    items: OpenAPIValueSchema;
+    items?: OpenAPIValueSchema;
     minItems?: number;
     maxItems?: number;
     uniqueItems?: boolean;
+}
+
+/**
+ * OpenAPI 3.1: type: 'null' as a standalone type
+ */
+export interface OpenAPINullSchema {
+    type: 'null';
+}
+
+/**
+ * OpenAPI 3.1: type as an array of types, e.g. type: ['string', 'null']
+ */
+export interface OpenAPITypeArraySchema extends OpenAPINullableSchema, OpenAPIEnumableSchema {
+    type: ('string' | 'number' | 'integer' | 'boolean' | 'object' | 'array' | 'null')[];
 }
 
 export interface OpenAPINullableSchema {

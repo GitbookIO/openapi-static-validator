@@ -314,6 +314,23 @@ describe('Array', () => {
         });
         expect(compiler.compile()).toMatchSnapshot();
     });
+
+    test('without items', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'array',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    test('without items and uniqueItems', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'array',
+            uniqueItems: true,
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
 });
 
 test('anyOf', () => {
@@ -365,4 +382,41 @@ test('allOf', () => {
         ],
     });
     expect(compiler.compile()).toMatchSnapshot();
+});
+
+describe('OpenAPI 3.1', () => {
+    test('type: null', () => {
+        const compiler = new Compiler();
+        compileValueSchema(compiler, {
+            type: 'null',
+        });
+        expect(compiler.compile()).toMatchSnapshot();
+    });
+
+    describe('type array', () => {
+        test('type: [string, null]', () => {
+            const compiler = new Compiler();
+            compileValueSchema(compiler, {
+                type: ['string', 'null'],
+            });
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('type: [string, number]', () => {
+            const compiler = new Compiler();
+            compileValueSchema(compiler, {
+                type: ['string', 'number'],
+            });
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('type: [string, null] with minLength', () => {
+            const compiler = new Compiler();
+            compileValueSchema(compiler, {
+                type: ['string', 'null'],
+                minLength: 1,
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+    });
 });
