@@ -70,6 +70,8 @@ export interface OpenAPIStringSchema extends OpenAPINullableSchema, OpenAPIEnuma
     pattern?: string;
 }
 
+export type OpenAPIPropertyNamesSchema = OpenAPIValueSchema | Omit<OpenAPIStringSchema, 'type'>;
+
 interface CommonNumberSchema {
     maximum?: number;
     minimum?: number;
@@ -103,6 +105,7 @@ export interface OpenAPIObjectSchema extends OpenAPINullableSchema {
     properties?: {
         [key: string]: OpenAPIValueSchema & { default?: string | number | boolean };
     };
+    propertyNames?: OpenAPIPropertyNamesSchema;
     additionalProperties?: boolean | OpenAPIValueSchema;
     minProperties?: number;
     maxProperties?: number;
