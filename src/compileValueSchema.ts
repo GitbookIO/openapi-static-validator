@@ -73,12 +73,7 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
 }
 
 function normalizePropertyNamesSchema(schema: OpenAPIPropertyNamesSchema): OpenAPIValueSchema {
-    if (
-        'type' in schema ||
-        'anyOf' in schema ||
-        'oneOf' in schema ||
-        'allOf' in schema
-    ) {
+    if ('type' in schema || 'anyOf' in schema || 'oneOf' in schema || 'allOf' in schema) {
         return schema;
     }
 
