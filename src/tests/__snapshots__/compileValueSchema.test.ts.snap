@@ -1889,28 +1889,14 @@ export class ValidationError extends RequestError {
         this.path = path;
     }
 }
-function obj1(path, value, context) {
+function obj0(path, value, context) {
+    if (value === null) {
+        return value;
+    }
     if (typeof value !== 'string') {
         return new ValidationError(path, 'expected a string');
     }
     return value;
-}
-function obj2(path, value, context) {
-    if (value !== null) {
-        return new ValidationError(path, 'expected null');
-    }
-    return value;
-}
-function obj0(path, value, context) {
-    const value0 = obj1(path, value, context);
-    if (!(value0 instanceof ValidationError)) {
-        return value0;
-    }
-    const value1 = obj2(path, value, context);
-    if (!(value1 instanceof ValidationError)) {
-        return value1;
-    }
-    return new ValidationError(path, 'expected one of the anyOf schemas to match');
 }"
 `;
 
@@ -2008,7 +1994,10 @@ export class ValidationError extends RequestError {
         this.path = path;
     }
 }
-function obj1(path, value, context) {
+function obj0(path, value, context) {
+    if (value === null) {
+        return value;
+    }
     if (typeof value !== 'string') {
         return new ValidationError(path, 'expected a string');
     }
@@ -2016,22 +2005,5 @@ function obj1(path, value, context) {
         return new ValidationError(path, 'expected at least 1 characters');
     }
     return value;
-}
-function obj2(path, value, context) {
-    if (value !== null) {
-        return new ValidationError(path, 'expected null');
-    }
-    return value;
-}
-function obj0(path, value, context) {
-    const value0 = obj1(path, value, context);
-    if (!(value0 instanceof ValidationError)) {
-        return value0;
-    }
-    const value1 = obj2(path, value, context);
-    if (!(value1 instanceof ValidationError)) {
-        return value1;
-    }
-    return new ValidationError(path, 'expected one of the anyOf schemas to match');
 }"
 `;
