@@ -14,6 +14,7 @@ import {
     OpenAPIOneOfSchema,
     OpenAPIPropertyNamesSchema,
     OpenAPIStringSchema,
+    OpenAPITypeArraySchema,
     OpenAPIValueSchema,
 } from './types';
 import { ValidationErrorIdentifier } from './error';
@@ -52,6 +53,11 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
     }
 
     if ('type' in schema) {
+        // OpenAPI 3.1: type can be an array, e.g. ["string", "null"]
+        if (Array.isArray(schema.type)) {
+            return compileTypeArraySchema(compiler, schema as OpenAPITypeArraySchema);
+        }
+
         switch (schema.type) {
             case 'object':
                 return compileObjectSchema(compiler, schema);
@@ -64,6 +70,8 @@ export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchem
                 return compileBooleanSchema(compiler, schema);
             case 'array':
                 return compileArraySchema(compiler, schema);
+            case 'null':
+                return compileNullTypeSchema(compiler, schema);
             default:
                 throw new Error(`Unsupported schema: ${JSON.stringify(schema)}`);
         }
@@ -81,6 +89,42 @@ function normalizePropertyNamesSchema(schema: OpenAPIPropertyNamesSchema): OpenA
         type: 'string',
         ...schema,
     };
+}
+
+/**
+ * OpenAPI 3.1: type: 'null' as a standalone type.
+ */
+function compileNullTypeSchema(compiler: Compiler, schema: object) {
+    return compiler.declareValidationFunction(schema, ({ value, error }) => {
+        return [
+            builders.ifStatement(
+                builders.binaryExpression('!==', value, builders.literal(null)),
+                builders.blockStatement([builders.returnStatement(error('expected null'))]),
+            ),
+            builders.returnStatement(value),
+        ];
+    });
+}
+
+/**
+ * OpenAPI 3.1: type as array, e.g. type: ['string', 'null']
+ * Converts to an anyOf schema internally.
+ */
+function compileTypeArraySchema(compiler: Compiler, schema: OpenAPITypeArraySchema) {
+    const { type, ...rest } = schema;
+
+    const typesWithoutNull = type.filter((t) => t !== 'null');
+    const hasNull = type.includes('null');
+
+    const anyOf: OpenAPIValueSchema[] = typesWithoutNull.map(
+        (t) => ({ ...rest, type: t }) as OpenAPIValueSchema,
+    );
+
+    if (hasNull) {
+        anyOf.push({ type: 'null' } as OpenAPIValueSchema);
+    }
+
+    return compileAnyOfSchema(compiler, { anyOf });
 }
 
 function compileAnyOfSchema(compiler: Compiler, schema: OpenAPIAnyOfSchema) {
@@ -644,6 +688,11 @@ function compileArraySchema(compiler: Compiler, schema: OpenAPIArraySchema) {
                     ]),
                 ),
             );
+        }
+
+        if (!schema.items) {
+            nodes.push(builders.returnStatement(value));
+            return nodes;
         }
 
         const valueSet = builders.identifier('valueSet');
