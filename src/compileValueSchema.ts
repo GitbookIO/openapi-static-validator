@@ -35,7 +35,10 @@ function createSafeLiteral(
 /**
  * Compile a JSON schema into a validation function.
  */
-export function compileValueSchema(compiler: Compiler, schema: OpenAPIValueSchema) {
+export function compileValueSchema(
+    compiler: Compiler,
+    schema: OpenAPIValueSchema,
+): namedTypes.Identifier {
     if ('$ref' in schema) {
         return compileValueSchema(compiler, compiler.resolveRef(schema));
     }
@@ -108,13 +111,29 @@ function compileNullTypeSchema(compiler: Compiler, schema: object) {
 
 /**
  * OpenAPI 3.1: type as array, e.g. type: ['string', 'null']
- * Converts to an anyOf schema internally.
+ * Converts nullable two-type unions to the existing nullable fast-path.
+ * Other unions are still compiled as anyOf.
  */
-function compileTypeArraySchema(compiler: Compiler, schema: OpenAPITypeArraySchema) {
+function compileTypeArraySchema(
+    compiler: Compiler,
+    schema: OpenAPITypeArraySchema,
+): namedTypes.Identifier {
     const { type, ...rest } = schema;
 
-    const typesWithoutNull = type.filter((t) => t !== 'null');
-    const hasNull = type.includes('null');
+    type OpenAPINonNullType = Exclude<OpenAPITypeArraySchema['type'][number], 'null'>;
+
+    const typesWithoutNull = type.filter((t): t is OpenAPINonNullType => t !== 'null');
+    const hasNull = typesWithoutNull.length !== type.length;
+
+    if (hasNull && type.length === 2 && typesWithoutNull.length === 1) {
+        const [nonNullType] = typesWithoutNull;
+
+        return compileValueSchema(compiler, {
+            ...rest,
+            type: nonNullType,
+            nullable: true,
+        } as OpenAPIValueSchema);
+    }
 
     const anyOf: OpenAPIValueSchema[] = typesWithoutNull.map(
         (t) => ({ ...rest, type: t }) as OpenAPIValueSchema,
