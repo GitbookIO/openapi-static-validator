@@ -143,7 +143,15 @@ export function compileOperation(
 
             const schemaFn = compileValueSchema(compiler, parameter.schema);
 
-            const isArrayType = 'type' in parameter.schema && parameter.schema.type === 'array';
+            let resolvedSchema = parameter.schema;
+            while (
+                typeof resolvedSchema === 'object' &&
+                resolvedSchema !== null &&
+                '$ref' in resolvedSchema
+            ) {
+                resolvedSchema = compiler.resolveRef(resolvedSchema);
+            }
+            const isArrayType = 'type' in resolvedSchema && resolvedSchema.type === 'array';
 
             // Assign the query parameter to a variable
             nodes.push(
