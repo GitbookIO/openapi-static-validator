@@ -44,10 +44,7 @@ export function compileValueSchema(
         const { $ref, ...constraints } = schema;
         if (Object.keys(constraints).length > 0) {
             // Apply the constraints to the additionalProperties schema if it exists
-            if (
-                resolved.type === 'object' &&
-                typeof resolved.additionalProperties === 'object'
-            ) {
+            if (resolved.type === 'object' && typeof resolved.additionalProperties === 'object') {
                 return compileValueSchema(compiler, {
                     ...resolved,
                     additionalProperties: { ...resolved.additionalProperties, ...constraints },
