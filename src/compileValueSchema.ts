@@ -50,6 +50,15 @@ export function compileValueSchema(
                     additionalProperties: { ...resolved.additionalProperties, ...constraints },
                 });
             }
+
+            // Apply the constraints to the items schema if it exists
+            if (resolved.type === 'array' && typeof resolved.items === 'object') {
+                return compileValueSchema(compiler, {
+                    ...resolved,
+                    items: { ...resolved.items, ...constraints },
+                });
+            }
+
             // Otherwise merge directly into the resolved schema
             return compileValueSchema(compiler, { ...resolved, ...constraints });
         }
