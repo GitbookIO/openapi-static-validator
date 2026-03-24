@@ -419,4 +419,64 @@ describe('OpenAPI 3.1', () => {
             expect(compiler.compile()).toMatchSnapshot();
         });
     });
+
+    describe('$ref with sibling keywords', () => {
+        test('$ref with maxLength', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        MyString: { type: 'string' },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/MyString',
+                maxLength: 64,
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('$ref with minLength and pattern', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        MyString: { type: 'string' },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/MyString',
+                minLength: 1,
+                pattern: '^[a-z]+$',
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('$ref with only description does not change output', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        MyString: { type: 'string' },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/MyString',
+                description: 'A localized title',
+            } as any);
+
+            const compilerPlain = new Compiler({
+                components: {
+                    schemas: {
+                        MyString: { type: 'string' },
+                    },
+                },
+            });
+            compileValueSchema(compilerPlain, {
+                $ref: '#/components/schemas/MyString',
+            });
+
+            expect(compiler.compile()).toEqual(compilerPlain.compile());
+        });
+    });
 });

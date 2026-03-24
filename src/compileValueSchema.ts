@@ -40,7 +40,24 @@ export function compileValueSchema(
     schema: OpenAPIValueSchema,
 ): namedTypes.Identifier {
     if ('$ref' in schema) {
-        return compileValueSchema(compiler, compiler.resolveRef(schema));
+        const resolved = compiler.resolveRef(schema);
+        const { $ref, ...constraints } = schema;
+        if (Object.keys(constraints).length > 0) {
+            // Apply the constraints to the additionalProperties schema if it exists
+            if (
+                resolved.type === 'object' &&
+                typeof resolved.additionalProperties === 'object'
+            ) {
+                return compileValueSchema(compiler, {
+                    ...resolved,
+                    additionalProperties: { ...resolved.additionalProperties, ...constraints },
+                });
+            }
+            // Otherwise merge directly into the resolved schema
+            return compileValueSchema(compiler, { ...resolved, ...constraints });
+        }
+
+        return compileValueSchema(compiler, resolved);
     }
 
     if ('anyOf' in schema) {
