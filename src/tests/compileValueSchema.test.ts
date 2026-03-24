@@ -452,6 +452,81 @@ describe('OpenAPI 3.1', () => {
             expect(compiler.compile()).toMatchSnapshot();
         });
 
+        test('$ref with additionalProperties merges constraints into additionalProperties', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        StringMap: {
+                            type: 'object',
+                            additionalProperties: { type: 'string' },
+                        },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/StringMap',
+                maxLength: 64,
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('$ref with additionalProperties merges multiple constraints', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        StringMap: {
+                            type: 'object',
+                            additionalProperties: { type: 'string' },
+                        },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/StringMap',
+                minLength: 1,
+                pattern: '^[a-z]+$',
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('$ref with items merges constraints into items', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        StringArray: {
+                            type: 'array',
+                            items: { type: 'string' },
+                        },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/StringArray',
+                minLength: 1,
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
+        test('$ref with items merges multiple constraints', () => {
+            const compiler = new Compiler({
+                components: {
+                    schemas: {
+                        StringArray: {
+                            type: 'array',
+                            items: { type: 'string' },
+                        },
+                    },
+                },
+            });
+            compileValueSchema(compiler, {
+                $ref: '#/components/schemas/StringArray',
+                minLength: 1,
+                maxLength: 100,
+                pattern: '^[a-z]+$',
+            } as any);
+            expect(compiler.compile()).toMatchSnapshot();
+        });
+
         test('$ref with only description does not change output', () => {
             const compiler = new Compiler({
                 components: {
