@@ -41,26 +41,26 @@ export function compileValueSchema(
 ): namedTypes.Identifier {
     if ('$ref' in schema) {
         const resolved = compiler.resolveRef(schema);
-        const { $ref, ...constraints } = schema;
-        if (Object.keys(constraints).length > 0) {
-            // Apply the constraints to the additionalProperties schema if it exists
+        const { $ref, ...siblings } = schema;
+        if (Object.keys(siblings).length > 0) {
+            // Apply the siblings to the additionalProperties schema if it exists
             if (resolved.type === 'object' && typeof resolved.additionalProperties === 'object') {
                 return compileValueSchema(compiler, {
                     ...resolved,
-                    additionalProperties: { ...resolved.additionalProperties, ...constraints },
+                    additionalProperties: { ...resolved.additionalProperties, ...siblings },
                 });
             }
 
-            // Apply the constraints to the items schema if it exists
+            // Apply the siblings to the items schema if it exists
             if (resolved.type === 'array' && typeof resolved.items === 'object') {
                 return compileValueSchema(compiler, {
                     ...resolved,
-                    items: { ...resolved.items, ...constraints },
+                    items: { ...resolved.items, ...siblings },
                 });
             }
 
             // Otherwise merge directly into the resolved schema
-            return compileValueSchema(compiler, { ...resolved, ...constraints });
+            return compileValueSchema(compiler, { ...resolved, ...siblings });
         }
 
         return compileValueSchema(compiler, resolved);
